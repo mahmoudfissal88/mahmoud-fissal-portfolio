@@ -872,3 +872,10 @@ html.loading::after { content: ""; position: fixed; top: 50%; left: 50%; width: 
   .contact-form { gap: 20px; }
   .contact-form .field { gap: 8px; }
 }
+
+/* Tablet/phone contact form: heading spacing, no dead space under the button */
+@media (max-width: 899px) {
+  .contact-form .form-title { margin-bottom: 6px; }
+  .contact-form .form-status:empty { display: none; }
+  .contact-form { padding-bottom: 24px; }
+}
