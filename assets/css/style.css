@@ -881,3 +881,9 @@ html.loading::after { content: ""; position: fixed; top: 50%; left: 50%; width: 
   .contact-info { grid-template-rows: auto 1fr; }
   .contact-info #contactChannels { display: grid; grid-auto-rows: 1fr; gap: 16px; }
 }
+
+/* Tablet/phone: no dead space under the send button */
+@media (max-width: 899px) {
+  .contact-form .form-status:empty { display: none; }
+  .contact-form { padding-bottom: 28px; }
+}
