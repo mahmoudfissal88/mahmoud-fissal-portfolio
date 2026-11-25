@@ -152,7 +152,6 @@
         <div class="work-media"><img src="${w.image}" alt="${lang === "ar" ? w.title_ar : w.title_en}" loading="lazy"${w.img_opacity && w.img_opacity < 100 ? ` style="opacity:${w.img_opacity / 100}"` : ""}></div>
         <div class="work-meta">
           <h3>${lang === "ar" ? w.title_ar : w.title_en}</h3>
-          <span class="work-cat">${lang === "ar" ? c.ar : (c.en || c.ar)}</span>
         </div>
       </div>`;
       }).join("");
