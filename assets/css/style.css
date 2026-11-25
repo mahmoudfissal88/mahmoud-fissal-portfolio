@@ -865,3 +865,10 @@ html.loading::after { content: ""; position: fixed; top: 50%; left: 50%; width: 
   .service-card .svc-more { padding: 8px 10px !important; font-size: .76rem !important; gap: 4px !important; white-space: nowrap; }
   .service-card .svc-more-wrap { padding-top: 12px !important; }
 }
+
+/* Tablet/phone contact form: even spacing between fields (desktop untouched) */
+@media (max-width: 899px) {
+  #formFields { display: flex; flex-direction: column; gap: 18px; }
+  .contact-form { gap: 20px; }
+  .contact-form .field { gap: 8px; }
+}
