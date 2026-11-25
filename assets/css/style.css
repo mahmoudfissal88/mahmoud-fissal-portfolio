@@ -730,7 +730,8 @@ html[data-theme="dark"] { --shine-1: rgba(255,255,255,.98); --shine-2: rgba(255,
 /* Contact: spaced cards, column as tall as the form */
 #contactChannels { display: flex; flex-direction: column; gap: 14px; }
 @media (min-width: 900px) {
-  .contact-info { grid-template-rows: auto 1fr auto; align-content: stretch; }
+  .contact-info { grid-template-rows: auto 1fr; align-content: stretch; }
+  .socials:empty { display: none; }
   #contactChannels { min-height: 0; }
   #contactChannels > .info-row { flex: 1 1 0; }
 }
