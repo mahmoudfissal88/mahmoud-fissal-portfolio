@@ -227,7 +227,7 @@ html[dir="rtl"] .marquee-track { animation-name: marquee-rtl; }
   font-weight: 800; font-size: 1.05rem; color: var(--muted); white-space: nowrap;
   display: flex; align-items: center; gap: 44px;
 }
-.marquee-track span::after { content: "✦"; color: var(--accent); }
+.marquee-track span::after { content: var(--sep, "✦"); color: var(--accent); }
 @keyframes marquee { to { transform: translateX(-50%); } }
 @keyframes marquee-rtl { to { transform: translateX(50%); } }
 

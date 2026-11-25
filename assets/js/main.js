@@ -86,6 +86,7 @@
     $("#marqueeTrack").innerHTML = half + half;
     const bar = document.querySelector(".marquee");
     if (bar) bar.style.display = (m.visible === false || !items.length) ? "none" : "";
+    $("#marqueeTrack").style.setProperty("--sep", JSON.stringify(typeof m.sep === "string" ? m.sep : "✦"));
     const sp = Number(m.speed);
     $("#marqueeTrack").style.animationDuration = sp > 0 ? sp + "s" : "";
   }

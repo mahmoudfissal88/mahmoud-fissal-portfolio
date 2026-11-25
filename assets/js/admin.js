@@ -131,6 +131,7 @@
     const m = Object.assign({}, DEFAULT_CONTENT.marquee, content.marquee || {});
     $("#mq_visible").checked = m.visible !== false;
     $("#mq_speed").value = m.speed || 30;
+    $("#mq_sep").value = typeof m.sep === "string" ? m.sep : "✦";
     $("#mq_items_ar").value = (m.items_ar || []).join("\n");
     $("#mq_items_en").value = (m.items_en || []).join("\n");
     const f = Object.assign({}, DEFAULT_CONTENT.footer, content.footer || {});
@@ -657,6 +658,7 @@
       content.marquee = Object.assign({}, content.marquee, {
         visible: $("#mq_visible").checked,
         speed: Math.max(5, Math.min(200, Number($("#mq_speed").value) || 30)),
+        sep: $("#mq_sep").value.trim(),
         items_ar: lines("#mq_items_ar"), items_en: lines("#mq_items_en")
       });
       content.footer = Object.assign({}, content.footer, {

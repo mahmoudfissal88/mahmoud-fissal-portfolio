@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=1795605277">
+  <link rel="stylesheet" href="assets/css/style.css?v=1795605380">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%231f3ab0'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23ffc61a' font-family='sans-serif' font-weight='900'>M</text></svg>">
 </head>
 <body>
@@ -96,6 +96,8 @@
           <div class="form-grid">
             <div class="field"><label>إظهار الشريط · Show strip</label><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="mq_visible" style="width:auto"> إظهار الشريط المتحرك</label></div>
             <div class="field"><label>السرعة (ثواني للدورة الكاملة، أقل = أسرع) · Speed (seconds per loop)</label><input id="mq_speed" type="number" min="5" max="200" step="1"></div>
+            <div class="field"><label>العلامة بين الكلمات · Symbol between words</label><input id="mq_sep" maxlength="6" placeholder="✦" style="text-align:center;font-size:1.2rem"></div>
+            <div class="field"><label>أمثلة · Examples (انسخ والصق)</label><div style="font-size:1.3rem;letter-spacing:.6em">✦ • ◆ ★ ✺ ● | /</div></div>
             <div class="field"><label>كلمات الشريط (عربي) — كل كلمة في سطر</label><textarea id="mq_items_ar" rows="6"></textarea></div>
             <div class="field"><label>Strip words (EN) — one per line</label><textarea id="mq_items_en" rows="6"></textarea></div>
           </div>
@@ -248,8 +250,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/config.js?v=1795605277"></script>
-  <script src="assets/js/content.js?v=1795605277"></script>
-  <script src="assets/js/admin.js?v=1795605277"></script>
+  <script src="assets/js/config.js?v=1795605380"></script>
+  <script src="assets/js/content.js?v=1795605380"></script>
+  <script src="assets/js/admin.js?v=1795605380"></script>
 </body>
 </html>
