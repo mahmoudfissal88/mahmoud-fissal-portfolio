@@ -201,8 +201,8 @@
     dgProject = (content.designs || [])[i];
     dgIndex = 0;
     if (!dgProject) return;
-    renderDgProject(true);
     $("#dgProject").style.display = "";
+    renderDgProject(true);
     $("#dgProject").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
