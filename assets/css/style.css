@@ -887,3 +887,10 @@ html.loading::after { content: ""; position: fixed; top: 50%; left: 50%; width: 
   .contact-form .form-status:empty { display: none; }
   .contact-form { padding-bottom: 28px; }
 }
+
+/* Phones (scaled 768 layout): services popup fills the phone screen at normal reading size */
+html.ps .svc-popup { padding: 0; align-items: stretch; background: var(--surface); backdrop-filter: none; }
+html.ps .svc-pop-box { width: 100%; max-height: none; height: 100%; border: 0; border-radius: 0; box-shadow: none; padding: calc(24px * var(--ps)) calc(18px * var(--ps)); transform: none; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+html.ps .svc-pop-box > * { zoom: var(--ps); }
+html.ps .svc-pop-box > h3 { margin-top: 28px; }
+html.ps .svc-pop-box > .svc-pop-x { top: 14px; width: 40px; height: 40px; font-size: 1.6rem; }
