@@ -241,6 +241,9 @@ section { padding: 96px 0; }
   padding: 6px 16px; border-radius: 999px; margin-bottom: 16px; text-transform: uppercase;
 }
 .sec-head h2 { font-size: clamp(1.7rem, 3.6vw, 2.6rem); font-weight: 900; color: var(--text); line-height: 1.4; }
+@media (min-width: 700px) {
+  .sec-head h2.one-line { white-space: nowrap; font-size: clamp(1.25rem, 2.85vw, 2.05rem); }
+}
 .sec-head h2 .hl, .hl { color: var(--heading); }
 .sec-head p { color: var(--muted); margin-top: 12px; }
 
