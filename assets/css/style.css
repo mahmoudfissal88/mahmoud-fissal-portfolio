@@ -611,3 +611,23 @@ html[data-theme="dark"] .service-card summary:hover { color: #17264a; }
 .service-card { display: flex; flex-direction: column; }
 .service-card h3 { margin-bottom: 0; }
 .service-card details { margin-top: auto; padding-top: 20px; }
+
+/* Services: full-width row + popup */
+.svc-bleed { width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); padding: 0 clamp(16px, 3vw, 48px); box-sizing: border-box; }
+.service-card .svc-more-wrap { margin-top: auto; padding-top: 20px; position: relative; z-index: 1; }
+.svc-more {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; font-family: inherit;
+  padding: 11px 26px; font-size: .92rem; font-weight: 700; border-radius: 999px;
+  background: var(--accent-soft); border: 1.5px solid var(--heading); color: var(--heading); transition: all .25s;
+}
+.svc-more:hover { background: var(--heading); color: #fff; }
+html[data-theme="dark"] .svc-more:hover { color: #17264a; }
+.svc-more .chev { width: 14px; height: 14px; }
+.svc-popup { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(10,14,28,.55); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .25s; }
+.svc-popup.open { opacity: 1; pointer-events: auto; }
+.svc-pop-box { position: relative; width: min(460px, 100%); max-height: 80vh; overflow: auto; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 22px; padding: 28px 24px 24px; text-align: center; box-shadow: 0 30px 70px rgba(0,0,0,.35); transform: translateY(14px) scale(.96); transition: transform .3s; }
+.svc-popup.open .svc-pop-box { transform: none; }
+.svc-pop-box h3 { color: var(--heading); font-size: 1.2rem; font-weight: 800; margin: 0 0 16px; padding-inline: 28px; }
+.svc-pop-x { position: absolute; top: 10px; inset-inline-start: 12px; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--heading); font-size: 1.3rem; line-height: 1; cursor: pointer; }
+.svc-pop-x:hover { background: var(--heading); color: #fff; }
+.svc-pop-box .chip-list { justify-content: center; margin-top: 0; }

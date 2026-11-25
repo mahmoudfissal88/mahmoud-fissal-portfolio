@@ -103,19 +103,35 @@
         ${s.image ? `<div class="svc-bg" style="background-image:url('${String(s.image).replace(/'/g, "%27")}');opacity:${(s.bg_opacity || 16) / 100}"></div>` : ""}
         <div class="service-icon">${ICONS[s.icon] || ICONS.sparkle}</div>
         <h3>${lang === "ar" ? s.title_ar : s.title_en}</h3>
-        <details>
-          <summary><span class="sum-label" data-more="${t("services_toggle_more")}" data-less="${t("services_toggle_less")}">${t("services_toggle_more")}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></summary>
-          <div class="chip-list">${items.map((x) => `<span class="chip">${x}</span>`).join("")}</div>
-        </details>
+        <div class="svc-more-wrap"><button type="button" class="svc-more" data-i="${i}"><span>${t("services_toggle_more")}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></button></div>
       </div>`;
     }).join("");
-    document.querySelectorAll(".service-card details").forEach((d) => {
-      d.addEventListener("toggle", () => {
-        const l = d.querySelector(".sum-label");
-        l.textContent = d.open ? l.getAttribute("data-less") : l.getAttribute("data-more");
-      });
-    });
+    document.querySelectorAll(".service-card .svc-more").forEach((b) =>
+      b.addEventListener("click", () => openSvcPopup(+b.dataset.i))
+    );
   }
+
+  function openSvcPopup(i) {
+    const s = content.services[i];
+    if (!s) return;
+    const items = (lang === "ar" ? s.items_ar : s.items_en) || [];
+    let m = $("#svcPopup");
+    if (!m) {
+      m = document.createElement("div");
+      m.id = "svcPopup";
+      m.className = "svc-popup";
+      document.body.appendChild(m);
+      m.addEventListener("click", (e) => { if (e.target === m || e.target.closest(".svc-pop-x")) closeSvcPopup(); });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSvcPopup(); });
+    }
+    m.innerHTML = `<div class="svc-pop-box" role="dialog">
+      <button type="button" class="svc-pop-x" aria-label="close">&times;</button>
+      <h3>${lang === "ar" ? s.title_ar : s.title_en}</h3>
+      <div class="chip-list">${items.map((x) => `<span class="chip">${x}</span>`).join("")}</div>
+    </div>`;
+    requestAnimationFrame(() => m.classList.add("open"));
+  }
+  function closeSvcPopup() { const m = $("#svcPopup"); if (m) m.classList.remove("open"); }
 
   function renderPortfolio() {
     const catOf = (w) => {
