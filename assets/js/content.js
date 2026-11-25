@@ -226,9 +226,5 @@ const DEFAULT_CONTENT = {
   theme: {
     light: { accent: "#f5b301", heading: "#1f3ab0", bg: "#f2f3f5" },
     dark: { accent: "#ffc61a", heading: "#ffc61a", bg: "#17264a" }
-  },
-  theme_admin: {
-    light: { accent: "#f5b301", heading: "#1f3ab0", bg: "#f2f3f5" },
-    dark: { accent: "#ffc61a", heading: "#ffc61a", bg: "#17264a" }
   }
 };

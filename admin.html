@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=1795588522">
+  <link rel="stylesheet" href="assets/css/style.css?v=1795588280">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%231f3ab0'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23ffc61a' font-family='sans-serif' font-weight='900'>M</text></svg>">
 </head>
 <body>
@@ -35,7 +35,7 @@
   <!-- Admin shell -->
   <div class="admin-shell" id="adminShell" style="display:none">
     <div class="admin-topbar">
-      <h1>Mahmoud Fissal</h1>
+      <h1>لوحة التحكم · Admin</h1>
       <div class="admin-tabs">
         <button class="admin-tab active" data-panel="hero">الرئيسية</button>
         <button class="admin-tab" data-panel="about">عنّي</button>
@@ -45,7 +45,6 @@
         <button class="admin-tab" data-panel="colors">الألوان</button>
         <button class="admin-tab" data-panel="messages">الرسائل</button>
       </div>
-      <button class="small-btn" id="adminThemeBtn" title="الوضع الفاتح / الغامق · Theme">🌙</button>
       <a class="small-btn" href="index.html" target="_blank">معاينة الموقع ↗</a>
       <button class="small-btn danger" id="logoutBtn">خروج</button>
     </div>
@@ -195,10 +194,8 @@
 
     <!-- Colors panel -->
     <div class="admin-panel" data-panel="colors">
-      <h2>ألوان صفحة الزائر · Visitor page colors 🎨</h2>
+      <h2>ألوان الموقع · Theme colors 🎨</h2>
       <div id="colorsEditor"></div>
-      <h2 style="margin-top:26px">ألوان صفحة المدير · Admin page colors 🖥️</h2>
-      <div id="adminColorsEditor"></div>
       <div class="admin-actions">
         <span class="save-status" id="status-theme"></span>
       </div>
@@ -212,8 +209,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/config.js?v=1795588522"></script>
-  <script src="assets/js/content.js?v=1795588522"></script>
-  <script src="assets/js/admin.js?v=1795588522"></script>
+  <script src="assets/js/config.js?v=1795588280"></script>
+  <script src="assets/js/content.js?v=1795588280"></script>
+  <script src="assets/js/admin.js?v=1795588280"></script>
 </body>
 </html>
