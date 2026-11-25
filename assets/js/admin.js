@@ -144,6 +144,8 @@
         <div class="form-grid">
           <div class="field"><label>اسم القسم (عربي)</label><input class="svc-title-ar" value="${esc(s.title_ar)}"></div>
           <div class="field"><label>Category title (EN)</label><input class="svc-title-en" value="${esc(s.title_en)}"></div>
+          <div class="field"><label>الخدمات (عربي) — كل خدمة في سطر</label><textarea class="svc-items-ar">${esc((s.items_ar || []).join("\n"))}</textarea></div>
+          <div class="field"><label>Services (EN) — one per line</label><textarea class="svc-items-en">${esc((s.items_en || []).join("\n"))}</textarea></div>
           <div class="field full">
             <label>خلفية القسم · Category background</label>
             <div class="svc-bg-admin">
@@ -151,12 +153,14 @@
               <input type="file" class="svc-file" accept="image/*" hidden>
               <button type="button" class="small-btn svc-upload">رفع · Upload</button>
               ${s.image ? `<button type="button" class="small-btn danger svc-bg-del">حذف الخلفية · Remove</button>` : ""}
+              <label style="display:flex;align-items:center;gap:8px;margin:0">الشفافية · Opacity
+                <input type="range" class="svc-opacity" min="5" max="100" value="${s.bg_opacity || 16}" style="width:120px">
+                <span class="svc-op-val">${s.bg_opacity || 16}%</span>
+              </label>
               <span style="flex:1"></span>
               <button type="button" class="small-btn danger svc-del">حذف القسم · Delete category</button>
             </div>
           </div>
-          <div class="field"><label>الخدمات (عربي) — كل خدمة في سطر</label><textarea class="svc-items-ar">${esc((s.items_ar || []).join("\n"))}</textarea></div>
-          <div class="field"><label>Services (EN) — one per line</label><textarea class="svc-items-en">${esc((s.items_en || []).join("\n"))}</textarea></div>
         </div>
       </div>`).join("");
     wireServicesEditor();
@@ -170,10 +174,16 @@
       content.services[i].title_en = row.querySelector(".svc-title-en").value;
       content.services[i].items_ar = row.querySelector(".svc-items-ar").value.split("\n").map((x) => x.trim()).filter(Boolean);
       content.services[i].items_en = row.querySelector(".svc-items-en").value.split("\n").map((x) => x.trim()).filter(Boolean);
+      content.services[i].bg_opacity = +row.querySelector(".svc-opacity").value;
     });
   }
 
   function wireServicesEditor() {
+    $$("#servicesEditor .svc-opacity").forEach((r) =>
+      r.addEventListener("input", () => {
+        r.closest(".svc-bg-admin").querySelector(".svc-op-val").textContent = r.value + "%";
+      })
+    );
     $$("#servicesEditor .svc-upload").forEach((b) =>
       b.addEventListener("click", () => b.closest(".svc-bg-admin").querySelector(".svc-file").click())
     );
