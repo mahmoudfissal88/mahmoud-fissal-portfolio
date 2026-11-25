@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>لوحة التحكم | محمود فيصل</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%231f3ab0'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23ffc61a' font-family='sans-serif' font-weight='900'>M</text></svg>">
+</head>
+<body>
+
+  <!-- Login -->
+  <div class="admin-body" id="loginView">
+    <form class="login-card" id="loginForm">
+      <div class="login-logo">M</div>
+      <h1>لوحة التحكم</h1>
+      <p class="sub">سجّل الدخول لتعديل محتوى الموقع<br>Sign in to edit the site</p>
+      <div class="field" style="margin-bottom:14px">
+        <label for="username">اسم المستخدم · Username</label>
+        <input id="username" autocomplete="username" required>
+      </div>
+      <div class="field" style="margin-bottom:20px">
+        <label for="password">كلمة المرور · Password</label>
+        <input id="password" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn-primary" type="submit" style="width:100%;justify-content:center">دخول · Sign in</button>
+      <div class="form-status" id="loginStatus" style="margin-top:12px;text-align:center"></div>
+    </form>
+  </div>
+
+  <!-- Admin shell -->
+  <div class="admin-shell" id="adminShell" style="display:none">
+    <div class="admin-topbar">
+      <h1>لوحة التحكم · Admin</h1>
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-panel="hero">الرئيسية</button>
+        <button class="admin-tab" data-panel="about">عنّي</button>
+        <button class="admin-tab" data-panel="services">الخدمات</button>
+        <button class="admin-tab" data-panel="portfolio">الأعمال</button>
+        <button class="admin-tab" data-panel="contact">التواصل</button>
+        <button class="admin-tab" data-panel="colors">الألوان</button>
+        <button class="admin-tab" data-panel="messages">الرسائل</button>
+      </div>
+      <a class="small-btn" href="index.html" target="_blank">معاينة الموقع ↗</a>
+      <button class="small-btn danger" id="logoutBtn">خروج</button>
+    </div>
+
+    <div id="offlineNotice" class="notice" style="display:none">
+      قاعدة البيانات غير مربوطة بعد (config.js فارغ). اللوحة ستعمل بعد ضبط SUPABASE_URL و SUPABASE_ANON_KEY.
+    </div>
+
+    <!-- Hero panel -->
+    <div class="admin-panel active" data-panel="hero">
+      <h2>قسم البداية · Hero</h2>
+      <div class="form-grid">
+        <div class="field"><label>اسم الموقع (عربي)</label><input id="site_name_ar"></div>
+        <div class="field"><label>Site name (EN)</label><input id="site_name_en"></div>
+        <div class="field"><label>الوصف المختصر (عربي)</label><input id="site_role_ar"></div>
+        <div class="field"><label>Tagline (EN)</label><input id="site_role_en"></div>
+        <div class="field"><label>العنوان — السطر الأول (عربي)</label><input id="hero_l1_ar"></div>
+        <div class="field"><label>Headline line 1 (EN)</label><input id="hero_l1_en"></div>
+        <div class="field"><label>العنوان — السطر الثاني (عربي)</label><input id="hero_l2_ar"></div>
+        <div class="field"><label>Headline line 2 (EN)</label><input id="hero_l2_en"></div>
+        <div class="field full"><label>النص التعريفي (عربي)</label><textarea id="hero_sub_ar"></textarea></div>
+        <div class="field full"><label>Intro text (EN)</label><textarea id="hero_sub_en"></textarea></div>
+        <div class="field full"><label>صورة البداية</label>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <input id="hero_image" placeholder="assets/img/hero-designer.png أو رابط صورة" style="flex:1;min-width:220px">
+            <input type="file" id="hero_image_file" accept="image/*" hidden>
+            <button class="small-btn" id="hero_image_btn">رفع صورة</button>
+          </div>
+        </div>
+      </div>
+      <div class="admin-actions">
+        <button class="btn btn-primary" data-save="hero">حفظ · Save</button>
+        <span class="save-status" id="status-hero"></span>
+      </div>
+    </div>
+
+    <!-- About panel -->
+    <div class="admin-panel" data-panel="about">
+      <h2>قسم عنّي · About</h2>
+      <div class="form-grid">
+        <div class="field full"><label>النص (عربي)</label><textarea id="about_text_ar"></textarea></div>
+        <div class="field full"><label>Text (EN)</label><textarea id="about_text_en"></textarea></div>
+        <div class="field full"><label>نقاط التميز (عربي) — كل نقطة في سطر</label><textarea id="about_points_ar"></textarea></div>
+        <div class="field full"><label>Highlights (EN) — one per line</label><textarea id="about_points_en"></textarea></div>
+        <div class="field full"><label>الصورة</label>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <input id="about_image" style="flex:1;min-width:220px">
+            <input type="file" id="about_image_file" accept="image/*" hidden>
+            <button class="small-btn" id="about_image_btn">رفع صورة</button>
+          </div>
+        </div>
+      </div>
+      <div class="admin-actions">
+        <button class="btn btn-primary" data-save="about">حفظ · Save</button>
+        <span class="save-status" id="status-about"></span>
+      </div>
+    </div>
+
+    <!-- Services panel -->
+    <div class="admin-panel" data-panel="services">
+      <h2>الخدمات · Services</h2>
+      <div id="servicesEditor"></div>
+      <div class="admin-actions">
+        <button class="btn btn-primary" data-save="services">حفظ · Save</button>
+        <span class="save-status" id="status-services"></span>
+      </div>
+    </div>
+
+    <!-- Portfolio panel -->
+    <div class="admin-panel" data-panel="portfolio">
+      <h2>الأعمال · Portfolio</h2>
+      <div id="portfolioEditor"></div>
+      <div class="admin-actions">
+        <button class="small-btn primary" id="addWorkBtn">+ إضافة عمل</button>
+        <button class="btn btn-primary" data-save="portfolio">حفظ · Save</button>
+        <span class="save-status" id="status-portfolio"></span>
+      </div>
+    </div>
+
+    <!-- Contact panel -->
+    <div class="admin-panel" data-panel="contact">
+      <h2>بيانات التواصل · Contact</h2>
+      <div class="form-grid">
+        <div class="field"><label>البريد الإلكتروني</label><input id="contact_email"></div>
+        <div class="field"><label>الهاتف</label><input id="contact_phone"></div>
+        <div class="field"><label>رابط واتساب (https://wa.me/...)</label><input id="contact_whatsapp"></div>
+        <div class="field"><label>الموقع (عربي)</label><input id="contact_location_ar"></div>
+        <div class="field"><label>Location (EN)</label><input id="contact_location_en"></div>
+      </div>
+      <h2 style="margin-top:24px">حسابات التواصل · Socials</h2>
+      <div id="socialsEditor"></div>
+      <div class="admin-actions">
+        <button class="btn btn-primary" data-save="contact">حفظ · Save</button>
+        <span class="save-status" id="status-contact"></span>
+      </div>
+    </div>
+
+    <!-- Colors panel -->
+    <div class="admin-panel" data-panel="colors">
+      <h2>ألوان الموقع · Theme colors</h2>
+      <div id="colorsEditor"></div>
+      <div class="admin-actions">
+        <button class="btn btn-primary" data-save="theme">حفظ · Save</button>
+        <span class="save-status" id="status-theme"></span>
+      </div>
+    </div>
+
+    <!-- Messages panel -->
+    <div class="admin-panel" data-panel="messages">
+      <h2>رسائل الزوار · Contact messages</h2>
+      <div id="messagesList"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/content.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>
