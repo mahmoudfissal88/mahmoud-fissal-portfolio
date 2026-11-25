@@ -193,17 +193,38 @@
       display: (v) => "@" + v.trim().replace(/^https?:\/\/(www\.)?instagram\.com\//, "").replace(/^@/, "").replace(/\/$/, "") }
   ];
 
+  function escHtml(s) {
+    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function normCF(cf) {
+    if (!cf || Array.isArray(cf.fields)) return cf || {};
+    const fields = ["name", "email", "msg"].map((id) => ({
+      id, type: id === "msg" ? "textarea" : (id === "email" ? "email" : "text"),
+      builtin: true, visible: true,
+      label_ar: cf[id + "_label_ar"], label_en: cf[id + "_label_en"],
+      ph_ar: cf[id + "_ph_ar"], ph_en: cf[id + "_ph_en"]
+    }));
+    return { send_ar: cf.send_ar, send_en: cf.send_en, sending_ar: cf.sending_ar, sending_en: cf.sending_en,
+      sent_ar: cf.sent_ar, sent_en: cf.sent_en, error_ar: cf.error_ar, error_en: cf.error_en, fields };
+  }
+
   function renderContactForm() {
-    const cf = content.contact_form || {};
-    const cfv = (k, d) => { const v = cf[k + "_" + lang]; return v === undefined ? d : v; };
-    [["fName", "name", "form_name"], ["fEmail", "email", "form_email"], ["fMsg", "msg", "form_message"]].forEach(([id, p, base]) => {
-      const lbl = document.querySelector(`#contactForm label[for="${id}"]`);
-      if (lbl) { const txt = cfv(p + "_label", t(base)); lbl.textContent = txt; lbl.style.display = txt === "" ? "none" : ""; }
-      const inp = $("#" + id);
-      if (inp) inp.placeholder = cfv(p + "_ph", "");
-    });
+    const cf = normCF(content.contact_form);
+    const wrap = $("#formFields");
+    if (wrap) {
+      wrap.innerHTML = (cf.fields || []).filter((f) => f.visible).map((f) => {
+        const label = (lang === "ar" ? f.label_ar : f.label_en) || "";
+        const ph = (lang === "ar" ? f.ph_ar : f.ph_en) || "";
+        const input = f.type === "textarea"
+          ? `<textarea id="fld_${f.id}" placeholder="${escHtml(ph)}" required></textarea>`
+          : `<input id="fld_${f.id}" type="${f.type === "email" ? "email" : "text"}" placeholder="${escHtml(ph)}" required>`;
+        return `<div class="field"><label for="fld_${f.id}"${label === "" ? ' style="display:none"' : ""}>${escHtml(label)}</label>${input}</div>`;
+      }).join("");
+    }
     const sendSpan = document.querySelector('#contactForm button [data-i18n="form_send"]');
-    if (sendSpan) sendSpan.textContent = cfv("send", t("form_send"));
+    const sendTxt = cf["send_" + lang];
+    if (sendSpan && sendTxt !== undefined) sendSpan.textContent = sendTxt;
   }
 
   function formStatusText(key) {
@@ -288,10 +309,20 @@
     status.className = "form-status";
     if (!supabase) { status.textContent = t("form_offline"); status.classList.add("err"); return; }
     status.textContent = formStatusText("sending");
+    const cf = normCF(content.contact_form);
+    const vals = (cf.fields || []).filter((f) => f.visible).map((f) => {
+      const el = $("#fld_" + f.id);
+      return { f, v: el ? el.value.trim() : "" };
+    });
+    const get = (id) => { const x = vals.find((o) => o.f.id === id); return x ? x.v : ""; };
+    let message = get("msg");
+    const extra = vals.filter((o) => !["name", "email", "msg"].includes(o.f.id))
+      .map((o) => ((o.f.label_en || o.f.label_ar || "Field") + ": " + o.v));
+    if (extra.length) message = (message ? message + "\n\n" : "") + extra.join("\n");
     const { error } = await supabase.from("contact_messages").insert({
-      name: $("#fName").value.trim(),
-      email: $("#fEmail").value.trim(),
-      message: $("#fMsg").value.trim()
+      name: get("name"),
+      email: get("email"),
+      message
     });
     if (error) { status.textContent = formStatusText("error"); status.classList.add("err"); }
     else {

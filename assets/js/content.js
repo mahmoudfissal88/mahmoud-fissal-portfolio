@@ -199,16 +199,15 @@ const DEFAULT_CONTENT = {
     items_en: ["Logos", "Brand Identity", "Social Media", "Infographics", "Presentations", "UI/UX", "Motion Graphics", "Books", "Learning Content", "Learning Platforms"]
   },
   contact_form: {
-    name_label_ar: "الاسم", name_label_en: "Name",
-    name_ph_ar: "ادخل اسمك هنا", name_ph_en: "Enter your name here",
-    email_label_ar: "البريد الإلكتروني", email_label_en: "Email",
-    email_ph_ar: "ادخل بريدك الإلكتروني هنا", email_ph_en: "Enter your email here",
-    msg_label_ar: "رسالتك", msg_label_en: "Your message",
-    msg_ph_ar: "اكتب رسالتك هنا", msg_ph_en: "Write your message here",
     send_ar: "إرسال", send_en: "Send",
     sending_ar: "جارٍ الإرسال...", sending_en: "Sending...",
     sent_ar: "وصلت رسالتك، شكرًا لك!", sent_en: "Message received, thank you!",
-    error_ar: "تعذر الإرسال، حاول مرة أخرى.", error_en: "Could not send, please try again."
+    error_ar: "تعذر الإرسال، حاول مرة أخرى.", error_en: "Could not send, please try again.",
+    fields: [
+      { id: "name", type: "text", builtin: true, visible: true, label_ar: "الاسم", label_en: "Name", ph_ar: "ادخل اسمك هنا", ph_en: "Enter your name here" },
+      { id: "email", type: "email", builtin: true, visible: true, label_ar: "البريد الإلكتروني", label_en: "Email", ph_ar: "ادخل بريدك الإلكتروني هنا", ph_en: "Enter your email here" },
+      { id: "msg", type: "textarea", builtin: true, visible: true, label_ar: "رسالتك", label_en: "Your message", ph_ar: "اكتب رسالتك هنا", ph_en: "Write your message here" }
+    ]
   },
   contact: {
     email: "hello@example.com",

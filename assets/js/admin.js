@@ -316,8 +316,75 @@
     scheduleAutoSave("portfolio");
   });
 
-  const CF_KEYS = ["name_label", "name_ph", "email_label", "email_ph", "msg_label", "msg_ph", "send", "sending", "sent", "error"]
-    .flatMap((p) => [p + "_ar", p + "_en"]);
+  const CF_TEXT_KEYS = ["send", "sending", "sent", "error"].flatMap((p) => [p + "_ar", p + "_en"]);
+
+  const EYE_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const EYE_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M9.9 4.24A9.5 9.5 0 0 1 12 4c6.5 0 10 8 10 8a17 17 0 0 1-2.16 3.19M6.61 6.61A16.6 16.6 0 0 0 2 12s3.5 8 10 8a9.7 9.7 0 0 0 5.39-1.61"/><path d="m2 2 20 20"/></svg>';
+  const TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>';
+
+  function normCF(cf) {
+    if (!cf || Array.isArray(cf.fields)) return cf || {};
+    const fields = ["name", "email", "msg"].map((id) => ({
+      id, type: id === "msg" ? "textarea" : (id === "email" ? "email" : "text"),
+      builtin: true, visible: true,
+      label_ar: cf[id + "_label_ar"], label_en: cf[id + "_label_en"],
+      ph_ar: cf[id + "_ph_ar"], ph_en: cf[id + "_ph_en"]
+    }));
+    return { send_ar: cf.send_ar, send_en: cf.send_en, sending_ar: cf.sending_ar, sending_en: cf.sending_en,
+      sent_ar: cf.sent_ar, sent_en: cf.sent_en, error_ar: cf.error_ar, error_en: cf.error_en, fields };
+  }
+
+  function renderFormFieldsEditor() {
+    const cf = (content.contact_form = normCF(content.contact_form));
+    const fields = cf.fields || (cf.fields = []);
+    $("#formFieldsEditor").innerHTML = fields.map((f, i) => `
+      <div class="cf-field" data-id="${f.id}" style="border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px;${f.visible ? "" : "opacity:.55"}">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <h3 style="margin:0;font-size:.92rem;flex:1">${esc(f.label_ar || f.label_en || "حقل جديد")}${f.label_en ? " · " + esc(f.label_en) : ""}${f.visible ? "" : " (مخفي)"}</h3>
+          <button type="button" class="small-btn cf-eye" data-i="${i}" title="إظهار / إخفاء" style="padding:4px 8px">${f.visible ? EYE_OPEN : EYE_OFF}</button>
+          <button type="button" class="small-btn danger cf-del" data-i="${i}" title="حذف" style="padding:4px 8px">${TRASH}</button>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label>العنوان (عربي)</label><input class="cf-label-ar" value="${esc(f.label_ar || "")}"></div>
+          <div class="field"><label>Label (EN)</label><input class="cf-label-en" value="${esc(f.label_en || "")}"></div>
+          <div class="field"><label>النص داخل الحقل (عربي)</label><input class="cf-ph-ar" value="${esc(f.ph_ar || "")}"></div>
+          <div class="field"><label>Placeholder (EN)</label><input class="cf-ph-en" value="${esc(f.ph_en || "")}"></div>
+          ${f.builtin ? "" : `<div class="field"><label>النوع · Type</label>
+            <select class="cf-type">
+              <option value="text" ${f.type === "text" ? "selected" : ""}>نص قصير · Short text</option>
+              <option value="textarea" ${f.type === "textarea" ? "selected" : ""}>نص طويل · Long text</option>
+            </select></div>`}
+        </div>
+      </div>`).join("");
+    $$("#formFieldsEditor .cf-eye").forEach((b) => b.addEventListener("click", () => {
+      syncFormFieldsFromDom();
+      const f = content.contact_form.fields[+b.dataset.i];
+      f.visible = !f.visible;
+      renderFormFieldsEditor();
+      saveSection("contact");
+    }));
+    $$("#formFieldsEditor .cf-del").forEach((b) => b.addEventListener("click", () => {
+      if (!confirm("حذف هذا الحقل من النموذج؟ · Delete this field?")) return;
+      syncFormFieldsFromDom();
+      content.contact_form.fields.splice(+b.dataset.i, 1);
+      renderFormFieldsEditor();
+      saveSection("contact");
+    }));
+  }
+
+  function syncFormFieldsFromDom() {
+    const cf = content.contact_form || {};
+    $$("#formFieldsEditor .cf-field").forEach((div) => {
+      const f = (cf.fields || []).find((x) => x.id === div.dataset.id);
+      if (!f) return;
+      f.label_ar = div.querySelector(".cf-label-ar").value;
+      f.label_en = div.querySelector(".cf-label-en").value;
+      f.ph_ar = div.querySelector(".cf-ph-ar").value;
+      f.ph_en = div.querySelector(".cf-ph-en").value;
+      const typeSel = div.querySelector(".cf-type");
+      if (typeSel) f.type = typeSel.value;
+    });
+  }
 
   function fillContact() {
     const c = content.contact || {};
@@ -325,11 +392,12 @@
       const el = $("#contact_" + k);
       if (el) el.value = c[k] || "";
     });
-    const cf = content.contact_form || {};
-    CF_KEYS.forEach((k) => {
+    const cf = (content.contact_form = normCF(content.contact_form));
+    CF_TEXT_KEYS.forEach((k) => {
       const el = $("#cf_" + k);
       if (el) el.value = cf[k] || "";
     });
+    renderFormFieldsEditor();
   }
 
   const COLOR_FIELDS = [
@@ -449,8 +517,9 @@
       });
       delete content.contact.location_ar;
       delete content.contact.location_en;
+      syncFormFieldsFromDom();
       const cfNew = Object.assign({}, content.contact_form);
-      CF_KEYS.forEach((k) => { const el = $("#cf_" + k); if (el) cfNew[k] = el.value; });
+      CF_TEXT_KEYS.forEach((k) => { const el = $("#cf_" + k); if (el) cfNew[k] = el.value; });
       content.contact_form = cfNew;
       const e1 = (await upsert("contact", content.contact)).error;
       if (e1) return e1;
@@ -501,6 +570,15 @@
 
   $$("[data-save]").forEach((btn) => {
     btn.addEventListener("click", () => saveSection(btn.dataset.save));
+  });
+
+  $("#addFormField").addEventListener("click", () => {
+    syncFormFieldsFromDom();
+    const cf = (content.contact_form = normCF(content.contact_form));
+    const fields = cf.fields || (cf.fields = []);
+    fields.push({ id: "f" + Date.now().toString(36), type: "text", builtin: false, visible: true, label_ar: "", label_en: "", ph_ar: "", ph_en: "" });
+    renderFormFieldsEditor();
+    saveSection("contact");
   });
 
   /* ---------- Messages ---------- */
