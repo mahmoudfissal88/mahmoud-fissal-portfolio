@@ -406,18 +406,35 @@
     ["bg", "لون الخلفية · Background"]
   ];
 
+  const TC_SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></svg>';
+  const TC_MOON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+  const TC_COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+
   function renderColorsEditor() {
-    $("#colorsEditor").innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;align-items:start">` +
+    $("#colorsEditor").innerHTML = `<div class="theme-cards">` +
       ["light", "dark"].map((mode) => `
-      <div>
-        <h3 style="margin:14px 0 12px;font-size:.95rem">${mode === "light" ? "الوضع الفاتح · Light" : "الوضع الغامق · Dark"}</h3>
-        ${COLOR_FIELDS.map(([k, label]) => `
-          <div class="color-row">
-            <label>${label}</label>
-            <input type="color" data-mode="${mode}" data-key="${k}" value="${content.theme[mode][k] || "#000000"}">
-            <input type="text" data-mode="${mode}" data-key="${k}" value="${content.theme[mode][k] || ""}">
-          </div>`).join("")}
+      <div class="theme-card">
+        <div class="tc-head tc-head-${mode}"><span>${mode === "light" ? "الوضع الفاتح · Light" : "الوضع الغامق · Dark"}</span>${mode === "light" ? TC_SUN : TC_MOON}</div>
+        <div class="tc-body">
+          ${COLOR_FIELDS.map(([k, label]) => `
+            <div class="tc-row">
+              <span class="tc-swatch"><input type="color" data-mode="${mode}" data-key="${k}" value="${content.theme[mode][k] || "#000000"}"></span>
+              <div class="tc-info">
+                <div class="tc-label">${label}</div>
+                <div class="tc-hex">
+                  <input type="text" data-mode="${mode}" data-key="${k}" value="${content.theme[mode][k] || ""}">
+                  <button type="button" class="tc-copy" data-mode="${mode}" data-key="${k}" title="نسخ · Copy">${TC_COPY}</button>
+                </div>
+              </div>
+            </div>`).join("")}
+        </div>
       </div>`).join("") + `</div>`;
+    $$("#colorsEditor .tc-copy").forEach((b) =>
+      b.addEventListener("click", () => {
+        const inp = $(`#colorsEditor input[type="text"][data-mode="${b.dataset.mode}"][data-key="${b.dataset.key}"]`);
+        if (inp && navigator.clipboard) navigator.clipboard.writeText(inp.value).catch(() => {});
+      })
+    );
     $$('#colorsEditor input[type="color"]').forEach((c) =>
       c.addEventListener("input", () => {
         $(`#colorsEditor input[type="text"][data-mode="${c.dataset.mode}"][data-key="${c.dataset.key}"]`).value = c.value;

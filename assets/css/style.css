@@ -500,6 +500,26 @@ html[data-theme="dark"] .admin-tab.active { color: #17264a; }
 .color-row input[type="color"] { width: 52px; height: 38px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); cursor: pointer; padding: 2px; }
 .color-row input[type="text"] { width: 110px; font-family: inherit; font-size: .85rem; padding: 9px 13px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--bg); color: var(--text); direction: ltr; }
 
+.theme-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: start; }
+.theme-card { border-radius: 20px; overflow: hidden; background: #f6f9ff; border: 1px solid rgba(23,38,74,.08); box-shadow: 0 8px 24px rgba(23,38,74,.10); }
+.tc-head { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; color: #fff; font-weight: 800; font-size: 1.05rem; }
+.tc-head-light { background: linear-gradient(135deg, #2b8bff, #1f6ef5); }
+.tc-head-dark { background: #17264a; }
+.tc-head svg { width: 22px; height: 22px; flex: none; }
+.tc-body { padding: 20px; display: flex; flex-direction: column; gap: 22px; }
+.tc-row { display: flex; align-items: center; gap: 16px; direction: ltr; }
+.tc-swatch input[type="color"] { -webkit-appearance: none; appearance: none; width: 74px; height: 74px; border: none; border-radius: 18px; padding: 0; cursor: pointer; background: none; box-shadow: 0 6px 16px rgba(23,38,74,.18); }
+.tc-swatch input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+.tc-swatch input[type="color"]::-webkit-color-swatch { border: none; border-radius: 18px; }
+.tc-swatch input[type="color"]::-moz-color-swatch { border: none; border-radius: 18px; }
+.tc-info { flex: 1; text-align: right; }
+.tc-label { font-weight: 800; color: #17264a; font-size: .95rem; margin-bottom: 8px; }
+.tc-hex { display: inline-flex; align-items: center; gap: 2px; background: #fff; border: 1.5px solid #dfe7f5; border-radius: 999px; padding: 4px 6px 4px 14px; }
+.tc-hex input { border: none; background: none; font-family: inherit; font-size: .85rem; font-weight: 700; color: #17264a; width: 84px; direction: ltr; outline: none; padding: 4px 0; }
+.tc-copy { border: none; background: none; color: #4a6cf7; cursor: pointer; padding: 5px; display: inline-flex; border-radius: 8px; }
+.tc-copy:hover { background: #eef3ff; }
+.tc-copy svg { width: 15px; height: 15px; }
+
 .notice {
   background: var(--accent-soft); border: 1px solid var(--accent);
   border-radius: 14px; padding: 14px 18px; font-size: .86rem; font-weight: 600;
