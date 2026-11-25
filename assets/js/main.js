@@ -11,7 +11,10 @@
   let activeFilter = "all";
 
   const $ = (s) => document.querySelector(s);
-  const t = (k) => (UI_STRINGS[lang] && UI_STRINGS[lang][k]) || k;
+  const t = (k) => {
+    const v = UI_STRINGS[lang] ? UI_STRINGS[lang][k] : undefined;
+    return v === undefined ? k : v;
+  };
 
   /* ---------- Theme & language ---------- */
   function applyTheme() {
