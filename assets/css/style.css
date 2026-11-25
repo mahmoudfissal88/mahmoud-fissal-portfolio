@@ -315,12 +315,12 @@ html[data-theme="dark"] .filter-btn.active { color: #17264a; }
 
 /* Designs marquee rows */
 .dg-rows { display: flex; flex-direction: column; gap: 34px; margin-top: 34px; }
-.dg-row { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.dg-row { overflow: hidden; direction: ltr; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
 .dg-track { display: flex; width: max-content; animation: dg-scroll 36s linear infinite; will-change: transform; }
 .dg-rev .dg-track { animation-direction: reverse; }
 .dg-row:hover .dg-track { animation-play-state: paused; }
 @keyframes dg-scroll { to { transform: translateX(-50%); } }
-.dg-card { width: 280px; flex-shrink: 0; margin-inline-end: 22px; background: #0b0b0d; border-radius: 18px; overflow: hidden; cursor: pointer; transition: transform .3s; }
+.dg-card { width: 280px; flex-shrink: 0; margin-inline-end: 22px; direction: rtl; background: #0b0b0d; border-radius: 18px; overflow: hidden; cursor: pointer; transition: transform .3s; }
 .dg-card:hover { transform: translateY(-4px); }
 .dg-logo { aspect-ratio: 1 / .8; overflow: hidden; }
 .dg-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
