@@ -227,7 +227,7 @@ html[dir="rtl"] .marquee-track { animation-name: marquee-rtl; }
   font-weight: 800; font-size: 1.05rem; color: var(--muted); white-space: nowrap;
   display: flex; align-items: center; gap: 44px;
 }
-.marquee-track span::after { content: var(--sep, "✦"); color: var(--accent); }
+.marquee-track span::after { content: var(--sep, "✦") "\FE0E"; color: var(--accent); }
 @keyframes marquee { to { transform: translateX(-50%); } }
 @keyframes marquee-rtl { to { transform: translateX(50%); } }
 
@@ -822,3 +822,18 @@ html:not(.loading) body > header, html:not(.loading) body > main, html:not(.load
 @keyframes mf-fade { from { opacity: 0; } to { opacity: 1; } }
 html.loading::after { content: ""; position: fixed; top: 50%; left: 50%; width: 38px; height: 38px; margin: -19px 0 0 -19px; border-radius: 50%; border: 4px solid rgba(245,179,1,.25); border-top-color: #f5b301; animation: mf-spin .8s linear infinite; z-index: 9999; }
 @keyframes mf-spin { to { transform: rotate(360deg); } }
+
+/* Phone & tablet polish (desktop untouched) */
+@media (max-width: 899px) {
+  .dg-project { overflow-x: hidden; }
+  .service-card .svc-bg { opacity: .11; }
+}
+@media (max-width: 640px) {
+  section { padding: 60px 0; }
+  .hero { padding: 120px 0 56px; }
+  .hero-visual { min-height: 320px; }
+  .contact-form { padding: 20px 16px; }
+  .field { gap: 9px; }
+  .footer-wrap { flex-direction: column; justify-content: center; text-align: center; gap: 14px; }
+  .footer-links { justify-content: center; }
+}
