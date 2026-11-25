@@ -201,12 +201,12 @@
     dgProject = (content.designs || [])[i];
     dgIndex = 0;
     if (!dgProject) return;
-    renderDgProject();
+    renderDgProject(true);
     $("#dgProject").style.display = "";
     $("#dgProject").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  function renderDgProject() {
+  function renderDgProject(animate) {
     const box = $("#dgProject");
     const imgs = dgProject.images || [];
     if (!imgs.length) { box.style.display = "none"; return; }
@@ -228,7 +228,25 @@
         <button class="dg-arrow" id="dgPrev" aria-label="prev">‹</button>
       </div>
       <div class="dg-dots" id="dgDots"></div>`;
-    layoutDg();
+    if (animate) {
+      const n = imgs.length;
+      const sl = [...box.querySelectorAll(".dg-slide")];
+      sl.forEach((s) => {
+        s.style.transition = "none";
+        s.style.opacity = 0;
+        s.style.transform = "translate(-50%, 0) translateY(140px) translateZ(-500px) scale(.4)";
+      });
+      void box.offsetWidth;
+      sl.forEach((s) => {
+        let o = +s.dataset.i - dgIndex;
+        if (o > n / 2) o -= n;
+        if (o < -n / 2) o += n;
+        const d = (Math.abs(o) * 0.14 + (o < 0 ? 0.05 : 0)).toFixed(2);
+        s.style.transition = `transform 1s cubic-bezier(.2,.9,.25,1) ${d}s, opacity .8s ease ${d}s`;
+      });
+      layoutDg();
+      setTimeout(() => sl.forEach((s) => (s.style.transition = "")), 2200);
+    } else layoutDg();
     $("#dgPrev").addEventListener("click", () => { dgIndex = (dgIndex - 1 + imgs.length) % imgs.length; layoutDg(); });
     $("#dgNext").addEventListener("click", () => { dgIndex = (dgIndex + 1) % imgs.length; layoutDg(); });
     $("#dgClose").addEventListener("click", () => { box.style.display = "none"; dgProject = null; });
