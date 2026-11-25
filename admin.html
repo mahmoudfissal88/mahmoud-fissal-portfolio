@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=1795580055">
+  <link rel="stylesheet" href="assets/css/style.css?v=1795580788">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%231f3ab0'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23ffc61a' font-family='sans-serif' font-weight='900'>M</text></svg>">
 </head>
 <body>
@@ -53,8 +53,6 @@
       قاعدة البيانات غير مربوطة بعد (config.js فارغ). اللوحة ستعمل بعد ضبط SUPABASE_URL و SUPABASE_ANON_KEY.
     </div>
 
-    <div class="notice" style="margin-bottom:18px">أي تعديل هنا يُحفظ تلقائياً ويظهر على صفحة الزائر مباشرة · Every change auto-saves and goes live instantly.</div>
-
     <!-- Hero panel -->
     <div class="admin-panel active" data-panel="hero">
       <h2>قسم البداية · Hero</h2>
@@ -80,7 +78,6 @@
       <h2 style="margin-top:26px">الأرقام والإحصائيات · Hero stats</h2>
       <div id="statsEditor"></div>
       <div class="admin-actions">
-        <button class="btn btn-primary" data-save="hero">حفظ · Save</button>
         <span class="save-status" id="status-hero"></span>
       </div>
     </div>
@@ -102,7 +99,6 @@
         </div>
       </div>
       <div class="admin-actions">
-        <button class="btn btn-primary" data-save="about">حفظ · Save</button>
         <span class="save-status" id="status-about"></span>
       </div>
     </div>
@@ -113,7 +109,6 @@
       <div id="servicesEditor"></div>
       <button class="btn" id="addServiceBtn" style="margin-top:16px;width:100%">＋ إضافة قسم جديد · Add category</button>
       <div class="admin-actions">
-        <button class="btn btn-primary" data-save="services">حفظ · Save</button>
         <span class="save-status" id="status-services"></span>
       </div>
     </div>
@@ -124,7 +119,6 @@
       <div id="portfolioEditor"></div>
       <div class="admin-actions">
         <button class="small-btn primary" id="addWorkBtn">+ إضافة عمل</button>
-        <button class="btn btn-primary" data-save="portfolio">حفظ · Save</button>
         <span class="save-status" id="status-portfolio"></span>
       </div>
     </div>
@@ -142,7 +136,6 @@
       <h2 style="margin-top:24px">حسابات التواصل · Socials</h2>
       <div id="socialsEditor"></div>
       <div class="admin-actions">
-        <button class="btn btn-primary" data-save="contact">حفظ · Save</button>
         <span class="save-status" id="status-contact"></span>
       </div>
     </div>
@@ -152,7 +145,6 @@
       <h2>ألوان الموقع · Theme colors</h2>
       <div id="colorsEditor"></div>
       <div class="admin-actions">
-        <button class="btn btn-primary" data-save="theme">حفظ · Save</button>
         <span class="save-status" id="status-theme"></span>
       </div>
     </div>
@@ -165,8 +157,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/config.js?v=1795580055"></script>
-  <script src="assets/js/content.js?v=1795580055"></script>
-  <script src="assets/js/admin.js?v=1795580055"></script>
+  <script src="assets/js/config.js?v=1795580788"></script>
+  <script src="assets/js/content.js?v=1795580788"></script>
+  <script src="assets/js/admin.js?v=1795580788"></script>
 </body>
 </html>
