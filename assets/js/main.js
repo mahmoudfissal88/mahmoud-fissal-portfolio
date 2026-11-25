@@ -142,19 +142,7 @@
       }
       return { key: (ar || en).trim(), ar, en };
     };
-    const seen = new Map();
-    content.portfolio.forEach((w) => { const c = catOf(w); if (c.key && !seen.has(c.key)) seen.set(c.key, c); });
-    if (activeFilter !== "all" && !seen.has(activeFilter)) activeFilter = "all";
-    const cats = [{ key: "all", ar: t("filter_all"), en: t("filter_all") }].concat(Array.from(seen.values()));
-    $("#filterBar").innerHTML = cats.map((c) =>
-      `<button class="filter-btn ${c.key === activeFilter ? "active" : ""}" data-cat="${c.key}">${lang === "ar" ? c.ar : (c.en || c.ar)}</button>`
-    ).join("");
-    document.querySelectorAll(".filter-btn").forEach((b) =>
-      b.addEventListener("click", () => {
-        activeFilter = b.getAttribute("data-cat");
-        renderPortfolio();
-      })
-    );
+    activeFilter = "all";
     $("#worksGrid").innerHTML = content.portfolio
       .filter((w) => activeFilter === "all" || catOf(w).key === activeFilter)
       .map((w, i) => {

@@ -631,3 +631,8 @@ html[data-theme="dark"] .svc-more:hover { color: #17264a; }
 .svc-pop-x { position: absolute; top: 10px; inset-inline-start: 12px; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--heading); font-size: 1.3rem; line-height: 1; cursor: pointer; }
 .svc-pop-x:hover { background: var(--heading); color: #fff; }
 .svc-pop-box .chip-list { justify-content: center; margin-top: 0; }
+
+/* Works: four per row, full width, no filter bar */
+.works-grid { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 1020px) { .works-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px) { .works-grid { grid-template-columns: 1fr; } }
