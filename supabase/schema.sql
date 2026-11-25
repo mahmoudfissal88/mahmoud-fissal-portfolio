@@ -19,6 +19,7 @@ create table if not exists public.portfolio_items (
   title_en text not null default '',
   category text not null default 'branding',
   image_url text not null default '',
+  img_opacity integer not null default 100,
   sort_order integer not null default 0,
   visible boolean not null default true,
   created_at timestamptz not null default now()

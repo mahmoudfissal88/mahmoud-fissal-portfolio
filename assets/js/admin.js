@@ -67,7 +67,8 @@
     if (works && works.length) {
       content.portfolio = works.map((w) => ({
         id: w.id, title_ar: w.title_ar, title_en: w.title_en,
-        category: w.category, image: w.image_url, sort_order: w.sort_order, visible: w.visible
+        category: w.category, image: w.image_url, sort_order: w.sort_order, visible: w.visible,
+        img_opacity: w.img_opacity
       }));
     }
   }
@@ -234,38 +235,67 @@
   function renderPortfolioEditor() {
     const cats = content.portfolio_categories || [];
     $("#portfolioEditor").innerHTML = content.portfolio.map((w, i) => `
-      <div class="portfolio-admin-item" data-work="${i}">
-        <img src="${w.image}" alt="">
-        <div class="fields">
-          <input class="w-title-ar" placeholder="العنوان (عربي)" value="${esc(w.title_ar)}">
-          <input class="w-title-en" placeholder="Title (EN)" value="${esc(w.title_en)}">
-          <select class="w-cat">${cats.map((c) => `<option value="${c.id}" ${c.id === w.category ? "selected" : ""}>${c.name_ar} · ${c.name_en}</option>`).join("")}</select>
-          <div style="display:flex;gap:6px">
-            <input class="w-image" placeholder="رابط الصورة" value="${esc(w.image)}" style="flex:1">
-            <input type="file" class="w-file" accept="image/*" hidden>
-            <button class="small-btn w-upload">رفع</button>
+      <div class="msg-item" data-work="${i}">
+        <div class="form-grid">
+          <div class="field"><label>العنوان (عربي)</label><input class="w-title-ar" value="${esc(w.title_ar)}"></div>
+          <div class="field"><label>Title (EN)</label><input class="w-title-en" value="${esc(w.title_en)}"></div>
+          <div class="field full"><label>القسم · Category</label>
+            <select class="w-cat">${cats.map((c) => `<option value="${c.id}" ${c.id === w.category ? "selected" : ""}>${c.name_ar} · ${c.name_en}</option>`).join("")}</select>
           </div>
-        </div>
-        <div class="row-btns">
-          <button class="small-btn danger w-del">حذف</button>
+          <div class="field full">
+            <label>صورة العمل · Work image</label>
+            <div class="svc-bg-admin">
+              ${w.image ? `<img src="${esc(w.image)}" alt="">` : `<span class="svc-bg-none">لا توجد صورة · No image</span>`}
+              <input type="file" class="w-file" accept="image/*" hidden>
+              <button type="button" class="small-btn w-upload">رفع · Upload</button>
+              ${w.image ? `<button type="button" class="small-btn danger w-img-del">حذف الصورة · Remove</button>` : ""}
+              <label style="display:flex;align-items:center;gap:8px;margin:0">الشفافية · Opacity
+                <input type="range" class="w-opacity" min="5" max="100" value="${w.img_opacity || 100}" style="width:120px">
+                <span class="w-op-val">${w.img_opacity || 100}%</span>
+              </label>
+              <span style="flex:1"></span>
+              <button type="button" class="small-btn danger w-del">حذف العمل · Delete work</button>
+            </div>
+          </div>
         </div>
       </div>`).join("");
 
+    $$("#portfolioEditor .w-opacity").forEach((r) =>
+      r.addEventListener("input", () => {
+        r.closest(".svc-bg-admin").querySelector(".w-op-val").textContent = r.value + "%";
+      })
+    );
+    $$("#portfolioEditor .w-img-del").forEach((b) =>
+      b.addEventListener("click", () => {
+        const i = +b.closest("[data-work]").dataset.work;
+        syncPortfolioFromForm();
+        if (content.portfolio[i]) content.portfolio[i].image = "";
+        renderPortfolioEditor();
+        saveSection("portfolio");
+      })
+    );
     $$("#portfolioEditor .w-del").forEach((b) =>
       b.addEventListener("click", () => {
+        if (!confirm("حذف هذا العمل نهائياً؟ · Delete this work permanently?")) return;
         const i = +b.closest("[data-work]").dataset.work;
         content.portfolio.splice(i, 1);
         renderPortfolioEditor();
-        scheduleAutoSave("portfolio");
+        saveSection("portfolio");
       })
     );
     $$("#portfolioEditor .w-upload").forEach((b) =>
-      b.addEventListener("click", () => b.closest(".fields").querySelector(".w-file").click())
+      b.addEventListener("click", () => b.closest(".svc-bg-admin").querySelector(".w-file").click())
     );
     $$("#portfolioEditor .w-file").forEach((f) =>
       f.addEventListener("change", async () => {
+        const i = +f.closest("[data-work]").dataset.work;
         const url = await uploadImage(f.files[0]);
-        if (url) { f.closest(".fields").querySelector(".w-image").value = url; scheduleAutoSave("portfolio"); }
+        if (url) {
+          syncPortfolioFromForm();
+          if (content.portfolio[i]) content.portfolio[i].image = url;
+          renderPortfolioEditor();
+          saveSection("portfolio");
+        }
       })
     );
   }
@@ -350,7 +380,7 @@
       content.portfolio[i].title_ar = row.querySelector(".w-title-ar").value;
       content.portfolio[i].title_en = row.querySelector(".w-title-en").value;
       content.portfolio[i].category = row.querySelector(".w-cat").value;
-      content.portfolio[i].image = row.querySelector(".w-image").value;
+      content.portfolio[i].img_opacity = +row.querySelector(".w-opacity").value;
     });
   }
 
@@ -392,7 +422,7 @@
       await supabase.from("portfolio_items").delete().neq("id", "00000000-0000-0000-0000-000000000000");
       const rows = content.portfolio.map((w, i) => ({
         title_ar: w.title_ar, title_en: w.title_en, category: w.category,
-        image_url: w.image, sort_order: i, visible: true
+        image_url: w.image, sort_order: i, visible: true, img_opacity: w.img_opacity || 100
       }));
       if (!rows.length) return null;
       return (await supabase.from("portfolio_items").insert(rows)).error;

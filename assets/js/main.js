@@ -136,7 +136,7 @@
       .filter((w) => activeFilter === "all" || w.category === activeFilter)
       .map((w, i) => `
       <div class="work-card reveal in" data-delay="${i % 3}">
-        <div class="work-media"><img src="${w.image}" alt="${lang === "ar" ? w.title_ar : w.title_en}" loading="lazy"></div>
+        <div class="work-media"><img src="${w.image}" alt="${lang === "ar" ? w.title_ar : w.title_en}" loading="lazy"${w.img_opacity && w.img_opacity < 100 ? ` style="opacity:${w.img_opacity / 100}"` : ""}></div>
         <div class="work-meta">
           <h3>${lang === "ar" ? w.title_ar : w.title_en}</h3>
           <span class="work-cat">${catName(w.category)}</span>
