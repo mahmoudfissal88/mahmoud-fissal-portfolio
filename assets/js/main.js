@@ -205,7 +205,7 @@
       label_ar: cf[id + "_label_ar"], label_en: cf[id + "_label_en"],
       ph_ar: cf[id + "_ph_ar"], ph_en: cf[id + "_ph_en"]
     }));
-    return { send_ar: cf.send_ar, send_en: cf.send_en, sending_ar: cf.sending_ar, sending_en: cf.sending_en,
+    return { inbox_email: cf.inbox_email || "", send_ar: cf.send_ar, send_en: cf.send_en, sending_ar: cf.sending_ar, sending_en: cf.sending_en,
       sent_ar: cf.sent_ar, sent_en: cf.sent_en, error_ar: cf.error_ar, error_en: cf.error_en, fields };
   }
 
@@ -328,6 +328,19 @@
     else {
       status.textContent = formStatusText("sent"); status.classList.add("ok");
       e.target.reset();
+      const inbox = (cf.inbox_email || "").trim();
+      if (inbox) {
+        fetch("https://formsubmit.co/ajax/" + encodeURIComponent(inbox), {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify({
+            _subject: "رسالة جديدة من الموقع · New message from your site",
+            name: get("name"),
+            email: get("email"),
+            message
+          })
+        }).catch(() => {});
+      }
     }
   });
 

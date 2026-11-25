@@ -336,7 +336,7 @@
       label_ar: cf[id + "_label_ar"], label_en: cf[id + "_label_en"],
       ph_ar: cf[id + "_ph_ar"], ph_en: cf[id + "_ph_en"]
     }));
-    return { send_ar: cf.send_ar, send_en: cf.send_en, sending_ar: cf.sending_ar, sending_en: cf.sending_en,
+    return { inbox_email: cf.inbox_email || "", send_ar: cf.send_ar, send_en: cf.send_en, sending_ar: cf.sending_ar, sending_en: cf.sending_en,
       sent_ar: cf.sent_ar, sent_en: cf.sent_en, error_ar: cf.error_ar, error_en: cf.error_en, fields };
   }
 
@@ -403,6 +403,8 @@
       const el = $("#cf_" + k);
       if (el) el.value = cf[k] || "";
     });
+    const inboxEl = $("#cf_inbox_email");
+    if (inboxEl) inboxEl.value = cf.inbox_email || "";
     renderFormFieldsEditor();
   }
 
@@ -549,6 +551,8 @@
       syncFormFieldsFromDom();
       const cfNew = Object.assign({}, content.contact_form);
       CF_TEXT_KEYS.forEach((k) => { const el = $("#cf_" + k); if (el) cfNew[k] = el.value; });
+      const inboxEl = $("#cf_inbox_email");
+      if (inboxEl) cfNew.inbox_email = inboxEl.value.trim();
       content.contact_form = cfNew;
       const e1 = (await upsert("contact", content.contact)).error;
       if (e1) return e1;

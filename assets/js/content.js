@@ -199,6 +199,7 @@ const DEFAULT_CONTENT = {
     items_en: ["Logos", "Brand Identity", "Social Media", "Infographics", "Presentations", "UI/UX", "Motion Graphics", "Books", "Learning Content", "Learning Platforms"]
   },
   contact_form: {
+    inbox_email: "",
     send_ar: "إرسال", send_en: "Send",
     sending_ar: "جارٍ الإرسال...", sending_en: "Sending...",
     sent_ar: "وصلت رسالتك، شكرًا لك!", sent_en: "Message received, thank you!",
