@@ -149,7 +149,9 @@
 
   function renderServicesEditor() {
     $("#servicesEditor").innerHTML = content.services.map((s, i) => `
-      <div class="msg-item" data-svc="${i}">
+      <div class="acard" data-svc="${i}">
+        <div class="tc-head ${i % 2 ? "tc-head-dark" : "tc-head-light"}"><span>${esc(s.title_ar || "قسم جديد")}${s.title_en ? " · " + esc(s.title_en) : ""}</span>${AC_SVC}</div>
+        <div class="acard-body">
         <div class="form-grid">
           <div class="field"><label>اسم القسم (عربي)</label><input class="svc-title-ar" value="${esc(s.title_ar)}"></div>
           <div class="field"><label>Category title (EN)</label><input class="svc-title-en" value="${esc(s.title_en)}"></div>
@@ -170,6 +172,7 @@
               <button type="button" class="small-btn danger svc-del">حذف القسم · Delete category</button>
             </div>
           </div>
+        </div>
         </div>
       </div>`).join("");
     wireServicesEditor();
@@ -242,7 +245,9 @@
 
   function renderPortfolioEditor() {
     $("#portfolioEditor").innerHTML = content.portfolio.map((w, i) => `
-      <div class="msg-item" data-work="${i}">
+      <div class="acard" data-work="${i}">
+        <div class="tc-head ${i % 2 ? "tc-head-dark" : "tc-head-light"}"><span>${esc(w.title_ar || "عمل جديد")}${w.title_en ? " · " + esc(w.title_en) : ""}</span>${AC_IMG}</div>
+        <div class="acard-body">
         <div class="form-grid">
           <div class="field"><label>العنوان (عربي)</label><input class="w-title-ar" value="${esc(w.title_ar)}"></div>
           <div class="field"><label>Title (EN)</label><input class="w-title-en" value="${esc(w.title_en)}"></div>
@@ -263,6 +268,7 @@
               <button type="button" class="small-btn danger w-del">حذف العمل · Delete work</button>
             </div>
           </div>
+        </div>
         </div>
       </div>`).join("");
 
@@ -338,7 +344,7 @@
     const cf = (content.contact_form = normCF(content.contact_form));
     const fields = cf.fields || (cf.fields = []);
     $("#formFieldsEditor").innerHTML = fields.map((f, i) => `
-      <div class="cf-field" data-id="${f.id}" style="border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px;${f.visible ? "" : "opacity:.55"}">
+      <div class="cf-field" data-id="${f.id}" style="${f.visible ? "" : "opacity:.55"}">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
           <h3 style="margin:0;font-size:.92rem;flex:1">${esc(f.label_ar || f.label_en || "حقل جديد")}${f.label_en ? " · " + esc(f.label_en) : ""}${f.visible ? "" : " (مخفي)"}</h3>
           <button type="button" class="small-btn cf-eye" data-i="${i}" title="إظهار / إخفاء" style="padding:4px 8px">${f.visible ? EYE_OPEN : EYE_OFF}</button>
@@ -399,6 +405,9 @@
     });
     renderFormFieldsEditor();
   }
+
+  const AC_SVC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>';
+  const AC_IMG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>';
 
   const COLOR_FIELDS = [
     ["accent", "اللون المميز · Accent"],

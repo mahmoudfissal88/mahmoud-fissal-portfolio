@@ -455,9 +455,15 @@ html[data-theme="dark"] .login-logo { color: #17264a; }
 .admin-tab.active { background: var(--heading); border-color: var(--heading); color: #fff; }
 html[data-theme="dark"] .admin-tab.active { color: #17264a; }
 
-.admin-panel { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 30px; }
+.admin-panel { display: none; }
 .admin-panel.active { display: block; animation: chipIn .35s ease; }
-.admin-panel h2 { font-size: 1.15rem; font-weight: 800; margin-bottom: 18px; color: var(--heading); }
+.admin-panel > h2 { font-size: 1.15rem; font-weight: 800; margin-bottom: 18px; color: var(--heading); }
+
+/* Admin cards: same look as the colors theme-cards */
+.acard { border-radius: 20px; overflow: hidden; background: #f6f9ff; border: 1px solid rgba(23,38,74,.08); box-shadow: 0 8px 24px rgba(23,38,74,.10); margin-bottom: 22px; }
+.acard-body { padding: 22px; }
+.acard .tc-head { font-size: 1rem; }
+.cf-field { background: #fff; border: 1px solid #e3ebf8; border-radius: 16px; padding: 14px 16px; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(23,38,74,.05); }
 
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 22px; }
 .form-grid .full { grid-column: 1 / -1; }
@@ -490,7 +496,7 @@ html[data-theme="dark"] .admin-tab.active { color: #17264a; }
 .small-btn.danger:hover { border-color: #d64545; color: #d64545; }
 .small-btn.primary { background: var(--accent); border-color: var(--accent); color: #17264a; }
 
-.msg-item { border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; background: var(--bg); }
+.msg-item { border: 1px solid rgba(23,38,74,.08); border-radius: 18px; padding: 16px 18px; margin-bottom: 12px; background: #f6f9ff; box-shadow: 0 6px 16px rgba(23,38,74,.07); }
 .msg-item .meta { display: flex; justify-content: space-between; gap: 10px; font-size: .8rem; color: var(--muted); margin-bottom: 6px; flex-wrap: wrap; }
 .msg-item b { color: var(--heading); }
 .msg-item.unread { border-color: var(--accent); }
@@ -528,5 +534,5 @@ html[data-theme="dark"] .admin-tab.active { color: #17264a; }
 
 /* Admin: category background row */
 .svc-bg-admin { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.svc-bg-admin img { width: 72px; height: 48px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); }
+.svc-bg-admin img { width: 96px; height: 64px; object-fit: cover; border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(23,38,74,.12); }
 .svc-bg-none { color: var(--muted); font-size: .85rem; }

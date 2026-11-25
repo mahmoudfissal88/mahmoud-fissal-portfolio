@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=1795585957">
+  <link rel="stylesheet" href="assets/css/style.css?v=1795586322">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%231f3ab0'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23ffc61a' font-family='sans-serif' font-weight='900'>M</text></svg>">
 </head>
 <body>
@@ -55,8 +55,11 @@
 
     <!-- Hero panel -->
     <div class="admin-panel active" data-panel="hero">
-      <h2>قسم البداية · Hero</h2>
-      <div class="form-grid">
+      <h2>الرئيسية · Home</h2>
+      <div class="acard">
+        <div class="tc-head tc-head-light"><span>قسم البداية · Hero</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg></div>
+        <div class="acard-body">
+          <div class="form-grid">
         <div class="field"><label>اسم الموقع (عربي)</label><input id="site_name_ar"></div>
         <div class="field"><label>Site name (EN)</label><input id="site_name_en"></div>
         <div class="field"><label>الوصف المختصر (عربي)</label><input id="site_role_ar"></div>
@@ -74,9 +77,15 @@
             <button class="small-btn" id="hero_image_btn">رفع صورة</button>
           </div>
         </div>
+          </div>
+        </div>
       </div>
-      <h2 style="margin-top:26px">الأرقام والإحصائيات · Hero stats</h2>
-      <div id="statsEditor"></div>
+      <div class="acard">
+        <div class="tc-head tc-head-dark"><span>الأرقام والإحصائيات · Hero stats</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></div>
+        <div class="acard-body">
+          <div id="statsEditor"></div>
+        </div>
+      </div>
       <div class="admin-actions">
         <span class="save-status" id="status-hero"></span>
       </div>
@@ -84,17 +93,22 @@
 
     <!-- About panel -->
     <div class="admin-panel" data-panel="about">
-      <h2>قسم عنّي · About</h2>
-      <div class="form-grid">
-        <div class="field full"><label>النص (عربي)</label><textarea id="about_text_ar"></textarea></div>
+      <h2>عنّي · About</h2>
+      <div class="acard">
+        <div class="tc-head tc-head-light"><span>قسم عنّي · About</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg></div>
+        <div class="acard-body">
+          <div class="form-grid">
+            <div class="field full"><label>النص (عربي)</label><textarea id="about_text_ar"></textarea></div>
         <div class="field full"><label>Text (EN)</label><textarea id="about_text_en"></textarea></div>
         <div class="field full"><label>نقاط التميز (عربي) — كل نقطة في سطر</label><textarea id="about_points_ar"></textarea></div>
         <div class="field full"><label>Highlights (EN) — one per line</label><textarea id="about_points_en"></textarea></div>
-        <div class="field full"><label>الصورة</label>
-          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-            <input id="about_image" style="flex:1;min-width:220px">
-            <input type="file" id="about_image_file" accept="image/*" hidden>
-            <button class="small-btn" id="about_image_btn">رفع صورة</button>
+            <div class="field full"><label>الصورة</label>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <input id="about_image" style="flex:1;min-width:220px">
+                <input type="file" id="about_image_file" accept="image/*" hidden>
+                <button class="small-btn" id="about_image_btn">رفع صورة</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -125,31 +139,40 @@
 
     <!-- Contact panel -->
     <div class="admin-panel" data-panel="contact">
-      <h2>بيانات التواصل · Contact</h2>
-      <div class="form-grid">
-        <div class="field"><label>البريد الإلكتروني · Email</label><input id="contact_email" placeholder="name@email.com"></div>
-        <div class="field"><label>رقم الهاتف · Phone</label><input id="contact_phone" placeholder="+20 ..."></div>
-        <div class="field"><label>WhatsApp &amp; Telegram</label><input id="contact_whatsapp" placeholder="رقم الهاتف، مثال: 201xxxxxxxxx"></div>
-        <div class="field"><label>LinkedIn</label><input id="contact_linkedin" placeholder="https://linkedin.com/in/..."></div>
-        <div class="field"><label>Facebook</label><input id="contact_facebook" placeholder="https://facebook.com/..."></div>
-        <div class="field"><label>Instagram</label><input id="contact_instagram" placeholder="https://instagram.com/..."></div>
+      <h2>التواصل · Contact</h2>
+      <div class="acard">
+        <div class="tc-head tc-head-light"><span>بيانات التواصل · Contact channels</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
+        <div class="acard-body">
+          <div class="form-grid">
+            <div class="field"><label>البريد الإلكتروني · Email</label><input id="contact_email" placeholder="name@email.com"></div>
+            <div class="field"><label>رقم الهاتف · Phone</label><input id="contact_phone" placeholder="+20 ..."></div>
+            <div class="field"><label>WhatsApp &amp; Telegram</label><input id="contact_whatsapp" placeholder="رقم الهاتف، مثال: 201xxxxxxxxx"></div>
+            <div class="field"><label>LinkedIn</label><input id="contact_linkedin" placeholder="https://linkedin.com/in/..."></div>
+            <div class="field"><label>Facebook</label><input id="contact_facebook" placeholder="https://facebook.com/..."></div>
+            <div class="field"><label>Instagram</label><input id="contact_instagram" placeholder="https://instagram.com/..."></div>
+          </div>
+        </div>
       </div>
-      <h2 style="margin-top:26px">نصوص نموذج التواصل · Contact form texts</h2>
-      <div id="formFieldsEditor"></div>
-      <button type="button" class="small-btn" id="addFormField" style="margin-top:6px">+ إضافة حقل · Add field</button>
-      <h3 style="margin:16px 0 8px;font-size:.92rem">زر الإرسال · Send button</h3>
-      <div class="form-grid">
-        <div class="field"><label>الزر (عربي)</label><input id="cf_send_ar"></div>
-        <div class="field"><label>Button (EN)</label><input id="cf_send_en"></div>
-      </div>
-      <h3 style="margin:16px 0 8px;font-size:.92rem">رسائل الحالة · Status messages</h3>
-      <div class="form-grid">
-        <div class="field"><label>أثناء الإرسال (عربي)</label><input id="cf_sending_ar"></div>
-        <div class="field"><label>Sending (EN)</label><input id="cf_sending_en"></div>
-        <div class="field"><label>بعد الإرسال بنجاح (عربي)</label><input id="cf_sent_ar"></div>
-        <div class="field"><label>Sent (EN)</label><input id="cf_sent_en"></div>
-        <div class="field"><label>عند الخطأ (عربي)</label><input id="cf_error_ar"></div>
-        <div class="field"><label>Error (EN)</label><input id="cf_error_en"></div>
+      <div class="acard">
+        <div class="tc-head tc-head-dark"><span>نموذج التواصل · Contact form</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
+        <div class="acard-body">
+          <div id="formFieldsEditor"></div>
+          <button type="button" class="small-btn" id="addFormField" style="margin-top:6px">+ إضافة حقل · Add field</button>
+          <h3 style="margin:16px 0 8px;font-size:.92rem">زر الإرسال · Send button</h3>
+          <div class="form-grid">
+            <div class="field"><label>الزر (عربي)</label><input id="cf_send_ar"></div>
+            <div class="field"><label>Button (EN)</label><input id="cf_send_en"></div>
+          </div>
+          <h3 style="margin:16px 0 8px;font-size:.92rem">رسائل الحالة · Status messages</h3>
+          <div class="form-grid">
+            <div class="field"><label>أثناء الإرسال (عربي)</label><input id="cf_sending_ar"></div>
+            <div class="field"><label>Sending (EN)</label><input id="cf_sending_en"></div>
+            <div class="field"><label>بعد الإرسال بنجاح (عربي)</label><input id="cf_sent_ar"></div>
+            <div class="field"><label>Sent (EN)</label><input id="cf_sent_en"></div>
+            <div class="field"><label>عند الخطأ (عربي)</label><input id="cf_error_ar"></div>
+            <div class="field"><label>Error (EN)</label><input id="cf_error_en"></div>
+          </div>
+        </div>
       </div>
       <div class="admin-actions">
         <span class="save-status" id="status-contact"></span>
@@ -173,8 +196,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/config.js?v=1795585957"></script>
-  <script src="assets/js/content.js?v=1795585957"></script>
-  <script src="assets/js/admin.js?v=1795585957"></script>
+  <script src="assets/js/config.js?v=1795586322"></script>
+  <script src="assets/js/content.js?v=1795586322"></script>
+  <script src="assets/js/admin.js?v=1795586322"></script>
 </body>
 </html>
