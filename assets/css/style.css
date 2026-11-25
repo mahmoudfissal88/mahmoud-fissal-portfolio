@@ -516,6 +516,9 @@ html[data-theme="dark"] .admin-tab.active { color: #17264a; }
 .acard { border-radius: 20px; overflow: hidden; background: #f6f9ff; border: 1px solid rgba(23,38,74,.08); box-shadow: 0 8px 24px rgba(23,38,74,.10); margin-bottom: 22px; }
 .acard-body { padding: 22px; }
 .acard .tc-head { font-size: 1rem; }
+.acard .tc-head-light { background: linear-gradient(135deg, #2f4fc4, #1f3ab0); }
+.acard .tc-head-dark { background: linear-gradient(135deg, #1f3ab0, #17264a); }
+.acard .tc-head { border-bottom: 3px solid var(--accent); }
 .cf-field { background: #fff; border: 1px solid #e3ebf8; border-radius: 16px; padding: 14px 16px; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(23,38,74,.05); }
 
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 22px; }
