@@ -407,14 +407,17 @@
   ];
 
   function renderColorsEditor() {
-    $("#colorsEditor").innerHTML = ["light", "dark"].map((mode) => `
-      <h3 style="margin:14px 0 12px;font-size:.95rem">${mode === "light" ? "الوضع الفاتح · Light" : "الوضع الغامق · Dark"}</h3>
-      ${COLOR_FIELDS.map(([k, label]) => `
-        <div class="color-row">
-          <label>${label}</label>
-          <input type="color" data-mode="${mode}" data-key="${k}" value="${content.theme[mode][k] || "#000000"}">
-          <input type="text" data-mode="${mode}" data-key="${k}" value="${content.theme[mode][k] || ""}">
-        </div>`).join("")}`).join("");
+    $("#colorsEditor").innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;align-items:start">` +
+      ["light", "dark"].map((mode) => `
+      <div>
+        <h3 style="margin:14px 0 12px;font-size:.95rem">${mode === "light" ? "الوضع الفاتح · Light" : "الوضع الغامق · Dark"}</h3>
+        ${COLOR_FIELDS.map(([k, label]) => `
+          <div class="color-row">
+            <label>${label}</label>
+            <input type="color" data-mode="${mode}" data-key="${k}" value="${content.theme[mode][k] || "#000000"}">
+            <input type="text" data-mode="${mode}" data-key="${k}" value="${content.theme[mode][k] || ""}">
+          </div>`).join("")}
+      </div>`).join("") + `</div>`;
     $$('#colorsEditor input[type="color"]').forEach((c) =>
       c.addEventListener("input", () => {
         $(`#colorsEditor input[type="text"][data-mode="${c.dataset.mode}"][data-key="${c.dataset.key}"]`).value = c.value;
