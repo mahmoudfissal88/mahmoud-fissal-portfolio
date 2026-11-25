@@ -115,6 +115,7 @@
     const defs = (DEFAULT_CONTENT.hero.stats || []);
     $("#statsEditor").innerHTML = stats.map((s, i) => {
       const d = defs[i] || {};
+      return `
       <div class="msg-item" data-stat="${i}">
         <div class="form-grid">
           <div class="field"><label>الرقم (عربي)</label><input class="st-value-ar" value="${esc(s.value_ar)}"></div>
