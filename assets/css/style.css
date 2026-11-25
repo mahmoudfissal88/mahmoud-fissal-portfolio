@@ -747,3 +747,9 @@ html[data-theme="dark"] { --shine-1: rgba(255,255,255,.98); --shine-2: rgba(255,
   .contact-info .info-row { background: var(--bg); }
 }
 .contact-form .btn { justify-content: center; text-align: center; }
+@media (min-width: 900px) {
+  .contact-form { grid-template-rows: 1fr auto auto; }
+  #formFields { display: flex; flex-direction: column; gap: 16px; min-height: 0; }
+  #formFields .field:last-child { flex: 1; grid-template-rows: auto 1fr; }
+  #formFields .field:last-child textarea { height: 100%; min-height: 130px; resize: none; }
+}
