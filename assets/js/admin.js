@@ -112,15 +112,18 @@
 
   function renderStatsEditor() {
     const stats = content.hero.stats || [];
-    $("#statsEditor").innerHTML = stats.map((s, i) => `
+    const defs = (DEFAULT_CONTENT.hero.stats || []);
+    $("#statsEditor").innerHTML = stats.map((s, i) => {
+      const d = defs[i] || {};
       <div class="msg-item" data-stat="${i}">
         <div class="form-grid">
           <div class="field"><label>الرقم (عربي)</label><input class="st-value-ar" value="${esc(s.value_ar)}"></div>
           <div class="field"><label>Number (EN)</label><input class="st-value-en" value="${esc(s.value_en)}"></div>
-          <div class="field"><label>الاسم (عربي)</label><input class="st-label-ar" value="${esc(s.label_ar || "")}"></div>
-          <div class="field"><label>Label (EN)</label><input class="st-label-en" value="${esc(s.label_en || "")}"></div>
+          <div class="field"><label>الاسم (عربي)</label><input class="st-label-ar" value="${esc(s.label_ar || d.label_ar || "")}"></div>
+          <div class="field"><label>Label (EN)</label><input class="st-label-en" value="${esc(s.label_en || d.label_en || "")}"></div>
         </div>
-      </div>`).join("");
+      </div>`;
+    }).join("");
   }
 
   function syncStatsFromForm() {
