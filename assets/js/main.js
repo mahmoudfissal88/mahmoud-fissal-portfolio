@@ -212,8 +212,8 @@
     if (!imgs.length) { box.style.display = "none"; return; }
     box.innerHTML = `
       <div class="dg-pj-head">
-        <button class="dg-close" id="dgClose">${lang === "ar" ? "إغلاق المشروع" : "Close project"}</button>
         <div class="dg-pj-title"><h3>${dgName(dgProject)}</h3><p>${dgDesc(dgProject)}</p></div>
+        <button class="dg-close" id="dgClose">${lang === "ar" ? "إغلاق المشروع" : "Close project"}</button>
       </div>
       <div class="dg-stage" id="dgStage">
         ${imgs.map((u, i) => `
@@ -243,8 +243,11 @@
 
   function layoutDg() {
     const imgs = dgProject.images || [];
+    const n = imgs.length;
     document.querySelectorAll("#dgStage .dg-slide").forEach((s) => {
-      const o = +s.dataset.i - dgIndex;
+      let o = +s.dataset.i - dgIndex;
+      if (o > n / 2) o -= n;
+      if (o < -n / 2) o += n;
       const ao = Math.abs(o);
       s.className = "dg-slide" + (o === 0 ? " center" : "");
       s.style.transform = `translate(-50%, 0) translateX(${o * 55}%) translateZ(${-ao * 170}px) rotateY(${o === 0 ? 0 : o < 0 ? 38 : -38}deg)`;

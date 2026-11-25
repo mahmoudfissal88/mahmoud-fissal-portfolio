@@ -331,7 +331,7 @@ html[data-theme="dark"] .filter-btn.active { color: #17264a; }
 /* Designs project coverflow */
 .dg-project { margin-top: 46px; border-top: 1px solid var(--border); padding-top: 26px; }
 .dg-pj-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 8px; }
-.dg-pj-title { margin-inline-start: auto; text-align: end; }
+.dg-pj-title { margin-inline-end: auto; text-align: start; }
 .dg-pj-title h3 { font-size: 1.5rem; font-weight: 800; color: var(--heading); margin: 0 0 2px; }
 .dg-pj-title p { margin: 0; color: var(--text); opacity: .7; font-size: .9rem; }
 .dg-close { padding: 9px 20px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--heading); font-family: inherit; font-weight: 700; font-size: .85rem; cursor: pointer; transition: all .25s; }
