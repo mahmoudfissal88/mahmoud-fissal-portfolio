@@ -103,8 +103,16 @@
     if (p) p.style.display = (f.show_year === false && f.show_name === false && !pick("rights")) ? "none" : "";
     const ex = $("#footerExtra");
     if (ex) { const v = pick("extra") || ""; ex.textContent = v; ex.style.display = v ? "" : "none"; }
-    const a = document.querySelector(".footer-links a");
-    if (a) { a.textContent = pick("admin_label") || ""; a.style.display = (f.admin_visible === false) ? "none" : ""; }
+    const box = $("#footerSocials");
+    if (box) {
+      const c = content.contact || {};
+      box.innerHTML = ["facebook", "instagram", "linkedin"].map((k) => {
+        const v = (c[k] || "").trim();
+        if (!v || f["soc_" + k] === false) return "";
+        const ch = CONTACT_CHANNELS.find((x) => x.key === k);
+        return `<a class="soc-ic" href="${escHtml(ch.href(v))}" target="_blank" rel="noopener" aria-label="${ch.label_en}">${CH_ICONS[k]}</a>`;
+      }).join("");
+    }
   }
 
   const ICONS = {

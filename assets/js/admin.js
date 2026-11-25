@@ -140,9 +140,7 @@
     $("#ft_show_name").checked = f.show_name !== false;
     $("#ft_extra_ar").value = f.extra_ar || "";
     $("#ft_extra_en").value = f.extra_en || "";
-    $("#ft_admin_visible").checked = f.admin_visible !== false;
-    $("#ft_admin_ar").value = f.admin_label_ar || "";
-    $("#ft_admin_en").value = f.admin_label_en || "";
+    ["facebook","instagram","linkedin"].forEach((k) => { $("#ft_soc_" + k).checked = f["soc_" + k] !== false; });
   }
 
   function renderStatsEditor() {
@@ -665,8 +663,7 @@
         rights_ar: $("#ft_rights_ar").value, rights_en: $("#ft_rights_en").value,
         show_year: $("#ft_show_year").checked, show_name: $("#ft_show_name").checked,
         extra_ar: $("#ft_extra_ar").value, extra_en: $("#ft_extra_en").value,
-        admin_visible: $("#ft_admin_visible").checked,
-        admin_label_ar: $("#ft_admin_ar").value, admin_label_en: $("#ft_admin_en").value
+        soc_facebook: $("#ft_soc_facebook").checked, soc_instagram: $("#ft_soc_instagram").checked, soc_linkedin: $("#ft_soc_linkedin").checked
       });
       const r1 = await upsert("site", content.site);
       const r2 = await upsert("hero", content.hero);

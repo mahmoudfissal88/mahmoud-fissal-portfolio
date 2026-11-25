@@ -464,6 +464,9 @@ footer {
 footer p { color: var(--muted); font-size: .88rem; font-weight: 600; }
 .footer-links { display: flex; gap: 18px; font-size: .88rem; font-weight: 700; }
 .footer-links a:hover { color: var(--heading); }
+.footer-links .soc-ic { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--card, #fff); border: 1px solid var(--border, rgba(0,0,0,.1)); transition: transform .2s, color .2s; }
+.footer-links .soc-ic svg { width: 17px; height: 17px; }
+.footer-links .soc-ic:hover { transform: translateY(-2px); color: var(--accent, #f5b301); }
 
 html.no-anim .reveal { opacity: 1 !important; transform: none !important; }
 html.no-anim, html.no-anim *, html.no-anim *::before, html.no-anim *::after { transition: none !important; animation: none !important; }
