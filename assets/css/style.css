@@ -600,3 +600,9 @@ html[data-theme="dark"] .admin-tab.active { color: #17264a; }
 .service-card summary:hover { background: var(--heading); color: #fff; border-color: var(--heading); }
 html[data-theme="dark"] .service-card summary:hover { color: #17264a; }
 .service-card .chip-list { justify-content: center; }
+
+/* Services: four cards per row on desktop */
+.services-grid { grid-template-columns: repeat(4, 1fr); }
+.service-card { padding: 28px 18px; }
+@media (max-width: 1020px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px) { .services-grid { grid-template-columns: 1fr; } }
