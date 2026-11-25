@@ -873,9 +873,9 @@ html.loading::after { content: ""; position: fixed; top: 50%; left: 50%; width: 
   .contact-form .field { gap: 8px; }
 }
 
-/* Tablet/phone contact form: heading spacing, no dead space under the button */
-@media (max-width: 899px) {
-  .contact-form .form-title { margin-bottom: 6px; }
-  .contact-form .form-status:empty { display: none; }
-  .contact-form { padding-bottom: 24px; }
+/* Tablet/phone: form box aligned with the info cards (top of first card, bottom of last card) */
+@media (min-width: 701px) and (max-width: 899px) {
+  .contact-grid { align-items: stretch; }
+  .contact-info .socials:empty { display: none; }
+  .contact-form { margin-top: 54.5px; }
 }
