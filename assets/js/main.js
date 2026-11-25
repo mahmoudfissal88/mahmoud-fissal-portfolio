@@ -158,13 +158,12 @@
   function renderDesigns() {
     const sec = $("#designs"), nav = $("#navDesigns");
     const items = content.designs || [];
-    if (!items.length) {
-      if (sec) sec.style.display = "none";
-      if (nav) nav.style.display = "none";
-      return;
-    }
     if (sec) sec.style.display = "";
     if (nav) nav.style.display = "";
+    if (!items.length) {
+      $("#designsGrid").innerHTML = `<p class="designs-empty">${lang === "ar" ? "تصاميم جديدة في الطريق… قريباً" : "New designs on the way… soon"}</p>`;
+      return;
+    }
     $("#designsGrid").innerHTML = items.map((w, i) => `
       <div class="work-card reveal in" data-delay="${i % 3}">
         <div class="work-media"><img src="${w.image}" alt="${lang === "ar" ? w.title_ar : w.title_en}" loading="lazy"${w.img_opacity && w.img_opacity < 100 ? ` style="opacity:${w.img_opacity / 100}"` : ""}></div>

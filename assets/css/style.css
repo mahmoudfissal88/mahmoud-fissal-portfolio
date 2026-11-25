@@ -311,6 +311,7 @@ html[data-theme="dark"] .service-icon { color: #17264a; background: var(--accent
 html[data-theme="dark"] .filter-btn.active { color: #17264a; }
 
 .works-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 24px; }
+.designs-empty { grid-column: 1 / -1; text-align: center; color: var(--text); opacity: .55; font-weight: 700; padding: 34px 0 10px; margin: 0; }
 
 .work-card {
   border-radius: var(--radius); overflow: hidden; position: relative;
