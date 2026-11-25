@@ -456,10 +456,15 @@
     if (!SUPABASE_URL || !SUPABASE_ANON_KEY || typeof window.supabase === "undefined") { if (window.__mfReveal) window.__mfReveal(); return; }
     try {
       supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      const { data, error } = await supabase.from("site_content").select("key, value");
+      const [siteRes, worksRes, dsgnRes] = await Promise.all([
+        supabase.from("site_content").select("key, value"),
+        supabase.from("portfolio_items").select("*").eq("visible", true).order("sort_order"),
+        supabase.from("designs_projects").select("*").eq("visible", true).order("sort_order")
+      ]);
+      const { data, error } = siteRes;
       if (error) { console.warn("Supabase:", error.message); if (window.__mfReveal) window.__mfReveal(); return; }
       (data || []).forEach((row) => { content[row.key] = row.value; });
-      const { data: works } = await supabase.from("portfolio_items").select("*").eq("visible", true).order("sort_order");
+      const works = worksRes && worksRes.data;
       if (works && works.length) {
         content.portfolio = works.map((w) => ({
           id: w.id, title_ar: w.title_ar, title_en: w.title_en,
@@ -467,7 +472,7 @@
           image: w.image_url, img_opacity: w.img_opacity
         }));
       }
-      const { data: dsgn } = await supabase.from("designs_projects").select("*").eq("visible", true).order("sort_order");
+      const dsgn = dsgnRes && dsgnRes.data;
       if (dsgn && dsgn.length) {
         content.designs = dsgn.map((p) => ({
           id: p.id, name_ar: p.name_ar, name_en: p.name_en,
@@ -544,6 +549,14 @@
   window.addEventListener("scroll", () => {
     $("#siteHeader").classList.toggle("scrolled", window.scrollY > 12);
   });
+
+  /* ---------- Pause animations of sections that are off screen (saves CPU/battery, same look) ---------- */
+  if ("IntersectionObserver" in window) {
+    const animIO = new IntersectionObserver((entries) => {
+      entries.forEach((en) => en.target.classList.toggle("anim-off", !en.isIntersecting));
+    }, { rootMargin: "120px 0px" });
+    document.querySelectorAll("main > section").forEach((sec) => animIO.observe(sec));
+  }
 
   /* ---------- Init ---------- */
   applyTheme();

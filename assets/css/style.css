@@ -894,3 +894,6 @@ html.ps .svc-pop-box { width: 100%; max-height: 100%; height: auto; border: 1px 
 html.ps .svc-pop-box > * { zoom: var(--ps); }
 html.ps .svc-pop-box > h3 { margin-top: 26px; }
 html.ps .svc-pop-box > .svc-pop-x { top: 8px; width: 38px; height: 38px; font-size: 1.5rem; }
+
+/* Off-screen sections do not run their infinite animations */
+.anim-off, .anim-off * { animation-play-state: paused !important; }
