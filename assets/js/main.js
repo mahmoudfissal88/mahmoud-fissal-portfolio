@@ -33,7 +33,9 @@
     document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
     $("#langToggle").textContent = lang === "ar" ? "EN" : "عربي";
     document.querySelectorAll("[data-i18n]").forEach((el) => {
-      el.innerHTML = t(el.getAttribute("data-i18n"));
+      const v = t(el.getAttribute("data-i18n"));
+      el.innerHTML = v;
+      el.style.display = v === "" ? "none" : "";
     });
     document.title = lang === "ar"
       ? content.site.name_ar + " | مصمم جرافيك ومطوّر تعليمي"
