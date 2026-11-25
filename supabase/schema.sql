@@ -18,6 +18,8 @@ create table if not exists public.portfolio_items (
   title_ar text not null default '',
   title_en text not null default '',
   category text not null default 'branding',
+  category_ar text not null default '',
+  category_en text not null default '',
   image_url text not null default '',
   img_opacity integer not null default 100,
   sort_order integer not null default 0,

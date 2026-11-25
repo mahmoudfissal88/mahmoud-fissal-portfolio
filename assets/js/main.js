@@ -118,9 +118,20 @@
   }
 
   function renderPortfolio() {
-    const cats = [{ id: "all", name_ar: t("filter_all"), name_en: t("filter_all") }].concat(content.portfolio_categories);
+    const catOf = (w) => {
+      let ar = w.category_ar || "", en = w.category_en || "";
+      if (!ar && !en) {
+        const c = (content.portfolio_categories || []).find((x) => x.id === w.category);
+        if (c) { ar = c.name_ar; en = c.name_en; } else { ar = en = w.category || ""; }
+      }
+      return { key: (ar || en).trim(), ar, en };
+    };
+    const seen = new Map();
+    content.portfolio.forEach((w) => { const c = catOf(w); if (c.key && !seen.has(c.key)) seen.set(c.key, c); });
+    if (activeFilter !== "all" && !seen.has(activeFilter)) activeFilter = "all";
+    const cats = [{ key: "all", ar: t("filter_all"), en: t("filter_all") }].concat(Array.from(seen.values()));
     $("#filterBar").innerHTML = cats.map((c) =>
-      `<button class="filter-btn ${c.id === activeFilter ? "active" : ""}" data-cat="${c.id}">${lang === "ar" ? c.name_ar : c.name_en}</button>`
+      `<button class="filter-btn ${c.key === activeFilter ? "active" : ""}" data-cat="${c.key}">${lang === "ar" ? c.ar : (c.en || c.ar)}</button>`
     ).join("");
     document.querySelectorAll(".filter-btn").forEach((b) =>
       b.addEventListener("click", () => {
@@ -128,20 +139,19 @@
         renderPortfolio();
       })
     );
-    const catName = (id) => {
-      const c = (content.portfolio_categories || []).find((x) => x.id === id);
-      return c ? (lang === "ar" ? c.name_ar : c.name_en) : id;
-    };
     $("#worksGrid").innerHTML = content.portfolio
-      .filter((w) => activeFilter === "all" || w.category === activeFilter)
-      .map((w, i) => `
+      .filter((w) => activeFilter === "all" || catOf(w).key === activeFilter)
+      .map((w, i) => {
+        const c = catOf(w);
+        return `
       <div class="work-card reveal in" data-delay="${i % 3}">
         <div class="work-media"><img src="${w.image}" alt="${lang === "ar" ? w.title_ar : w.title_en}" loading="lazy"${w.img_opacity && w.img_opacity < 100 ? ` style="opacity:${w.img_opacity / 100}"` : ""}></div>
         <div class="work-meta">
           <h3>${lang === "ar" ? w.title_ar : w.title_en}</h3>
-          <span class="work-cat">${catName(w.category)}</span>
+          <span class="work-cat">${lang === "ar" ? c.ar : (c.en || c.ar)}</span>
         </div>
-      </div>`).join("");
+      </div>`;
+      }).join("");
   }
 
   function renderAbout() {

@@ -65,11 +65,19 @@
     if (!error && data) data.forEach((row) => { content[row.key] = row.value; });
     const { data: works } = await supabase.from("portfolio_items").select("*").order("sort_order");
     if (works && works.length) {
-      content.portfolio = works.map((w) => ({
-        id: w.id, title_ar: w.title_ar, title_en: w.title_en,
-        category: w.category, image: w.image_url, sort_order: w.sort_order, visible: w.visible,
-        img_opacity: w.img_opacity
-      }));
+      content.portfolio = works.map((w) => {
+        let category_ar = w.category_ar || "", category_en = w.category_en || "";
+        if (!category_ar && !category_en) {
+          const c = (content.portfolio_categories || []).find((x) => x.id === w.category);
+          if (c) { category_ar = c.name_ar; category_en = c.name_en; }
+        }
+        return {
+          id: w.id, title_ar: w.title_ar, title_en: w.title_en,
+          category: w.category, category_ar, category_en,
+          image: w.image_url, sort_order: w.sort_order, visible: w.visible,
+          img_opacity: w.img_opacity
+        };
+      });
     }
   }
 
@@ -233,15 +241,13 @@
   });
 
   function renderPortfolioEditor() {
-    const cats = content.portfolio_categories || [];
     $("#portfolioEditor").innerHTML = content.portfolio.map((w, i) => `
       <div class="msg-item" data-work="${i}">
         <div class="form-grid">
           <div class="field"><label>العنوان (عربي)</label><input class="w-title-ar" value="${esc(w.title_ar)}"></div>
           <div class="field"><label>Title (EN)</label><input class="w-title-en" value="${esc(w.title_en)}"></div>
-          <div class="field full"><label>القسم · Category</label>
-            <select class="w-cat">${cats.map((c) => `<option value="${c.id}" ${c.id === w.category ? "selected" : ""}>${c.name_ar} · ${c.name_en}</option>`).join("")}</select>
-          </div>
+          <div class="field"><label>القسم (عربي)</label><input class="w-cat-ar" value="${esc(w.category_ar || "")}"></div>
+          <div class="field"><label>Category (EN)</label><input class="w-cat-en" value="${esc(w.category_en || "")}"></div>
           <div class="field full">
             <label>صورة العمل · Work image</label>
             <div class="svc-bg-admin">
@@ -304,7 +310,7 @@
     syncPortfolioFromForm();
     content.portfolio.push({
       id: "w" + Date.now(), title_ar: "عمل جديد", title_en: "New work",
-      category: (content.portfolio_categories[0] || {}).id || "branding", image: ""
+      category: "", category_ar: "", category_en: "", image: "", img_opacity: 100
     });
     renderPortfolioEditor();
     scheduleAutoSave("portfolio");
@@ -379,7 +385,8 @@
       if (!content.portfolio[i]) return;
       content.portfolio[i].title_ar = row.querySelector(".w-title-ar").value;
       content.portfolio[i].title_en = row.querySelector(".w-title-en").value;
-      content.portfolio[i].category = row.querySelector(".w-cat").value;
+      content.portfolio[i].category_ar = row.querySelector(".w-cat-ar").value;
+      content.portfolio[i].category_en = row.querySelector(".w-cat-en").value;
       content.portfolio[i].img_opacity = +row.querySelector(".w-opacity").value;
     });
   }
@@ -422,6 +429,7 @@
       await supabase.from("portfolio_items").delete().neq("id", "00000000-0000-0000-0000-000000000000");
       const rows = content.portfolio.map((w, i) => ({
         title_ar: w.title_ar, title_en: w.title_en, category: w.category,
+        category_ar: w.category_ar || "", category_en: w.category_en || "",
         image_url: w.image, sort_order: i, visible: true, img_opacity: w.img_opacity || 100
       }));
       if (!rows.length) return null;
