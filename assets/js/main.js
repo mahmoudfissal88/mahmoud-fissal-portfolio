@@ -73,7 +73,7 @@
     if (content.hero.image) $("#heroImg").src = content.hero.image;
     const labels = [t("stat_projects"), t("stat_fields"), t("stat_support")];
     $("#heroStats").innerHTML = (content.hero.stats || []).map((s, i) =>
-      `<div class="stat"><b>${lang === "ar" ? s.value_ar : s.value_en}</b><span>${labels[i] || ""}</span></div>`
+      `<div class="stat"><b>${lang === "ar" ? s.value_ar : s.value_en}</b><span>${(lang === "ar" ? s.label_ar : s.label_en) || labels[i] || ""}</span></div>`
     ).join("");
   }
 

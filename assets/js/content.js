@@ -102,9 +102,9 @@ const DEFAULT_CONTENT = {
     subtitle_en: "I'm Mahmoud Fissal, a graphic designer and instructional developer. I help brands and educational organizations turn their ideas into clear, engaging visual identities and learning experiences.",
     image: "assets/img/hero-designer.jpg",
     stats: [
-      { value_ar: "+120", value_en: "120+" },
-      { value_ar: "7", value_en: "7" },
-      { value_ar: "24/7", value_en: "24/7" }
+      { value_ar: "+120", value_en: "120+", label_ar: "خدمة متخصصة", label_en: "specialized services" },
+      { value_ar: "7", value_en: "7", label_ar: "مجالات خدمة", label_en: "service fields" },
+      { value_ar: "24/7", value_en: "24/7", label_ar: "دعم وتواصل", label_en: "support & contact" }
     ]
   },
   about: {

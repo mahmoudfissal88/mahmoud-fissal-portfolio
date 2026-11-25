@@ -96,6 +96,7 @@
     $("#hero_sub_ar").value = content.hero.subtitle_ar || "";
     $("#hero_sub_en").value = content.hero.subtitle_en || "";
     $("#hero_image").value = content.hero.image || "";
+    renderStatsEditor();
 
     $("#about_text_ar").value = content.about.text_ar || "";
     $("#about_text_en").value = content.about.text_en || "";
@@ -107,6 +108,30 @@
     renderPortfolioEditor();
     fillContact();
     renderColorsEditor();
+  }
+
+  function renderStatsEditor() {
+    const stats = content.hero.stats || [];
+    $("#statsEditor").innerHTML = stats.map((s, i) => `
+      <div class="msg-item" data-stat="${i}">
+        <div class="form-grid">
+          <div class="field"><label>الرقم (عربي)</label><input class="st-value-ar" value="${esc(s.value_ar)}"></div>
+          <div class="field"><label>Number (EN)</label><input class="st-value-en" value="${esc(s.value_en)}"></div>
+          <div class="field"><label>الاسم (عربي)</label><input class="st-label-ar" value="${esc(s.label_ar || "")}"></div>
+          <div class="field"><label>Label (EN)</label><input class="st-label-en" value="${esc(s.label_en || "")}"></div>
+        </div>
+      </div>`).join("");
+  }
+
+  function syncStatsFromForm() {
+    $$("#statsEditor [data-stat]").forEach((row) => {
+      const i = +row.dataset.stat;
+      if (!content.hero.stats[i]) return;
+      content.hero.stats[i].value_ar = row.querySelector(".st-value-ar").value;
+      content.hero.stats[i].value_en = row.querySelector(".st-value-en").value;
+      content.hero.stats[i].label_ar = row.querySelector(".st-label-ar").value;
+      content.hero.stats[i].label_en = row.querySelector(".st-label-en").value;
+    });
   }
 
   function renderServicesEditor() {
@@ -248,6 +273,7 @@
 
   const SAVERS = {
     hero: async () => {
+      syncStatsFromForm();
       content.site = {
         name_ar: $("#site_name_ar").value, name_en: $("#site_name_en").value,
         role_ar: $("#site_role_ar").value, role_en: $("#site_role_en").value
