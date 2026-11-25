@@ -208,13 +208,6 @@
           <div><b>${lang === "ar" ? ch.label_ar : ch.label_en}</b><span style="direction:ltr">${ch.display(val)}</span></div>
         </a>`;
       });
-    const loc = lang === "ar" ? c.location_ar : c.location_en;
-    if ((loc || "").trim()) {
-      rows.push(`<div class="info-row">
-        <span class="ic">${CH_ICONS.location}</span>
-        <div><b>${lang === "ar" ? "الموقع" : "Location"}</b><span style="direction:inherit">${loc}</span></div>
-      </div>`);
-    }
     $("#contactChannels").innerHTML = rows.join("");
     const fixedKeys = ["email", "phone", "whatsapp", "telegram", "linkedin", "facebook", "instagram"];
     $("#socials").innerHTML = (c.socials || [])

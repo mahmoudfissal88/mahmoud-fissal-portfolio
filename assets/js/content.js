@@ -206,8 +206,6 @@ const DEFAULT_CONTENT = {
     linkedin: "",
     facebook: "",
     instagram: "",
-    location_ar: "قنا، مصر",
-    location_en: "Qena, Egypt",
     socials: [
       { id: "behance", label: "Behance", url: "" },
       { id: "dribbble", label: "Dribbble", url: "" }

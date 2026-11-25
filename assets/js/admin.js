@@ -318,7 +318,7 @@
 
   function fillContact() {
     const c = content.contact || {};
-    ["email", "phone", "whatsapp", "telegram", "linkedin", "facebook", "instagram", "location_ar", "location_en"].forEach((k) => {
+    ["email", "phone", "whatsapp", "telegram", "linkedin", "facebook", "instagram"].forEach((k) => {
       const el = $("#contact_" + k);
       if (el) el.value = c[k] || "";
     });
@@ -438,8 +438,7 @@
         telegram: $("#contact_telegram").value,
         linkedin: $("#contact_linkedin").value,
         facebook: $("#contact_facebook").value,
-        instagram: $("#contact_instagram").value,
-        location_ar: $("#contact_location_ar").value, location_en: $("#contact_location_en").value
+        instagram: $("#contact_instagram").value
       });
       return (await upsert("contact", content.contact)).error;
     },
