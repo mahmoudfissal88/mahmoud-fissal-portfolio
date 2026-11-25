@@ -878,4 +878,6 @@ html.loading::after { content: ""; position: fixed; top: 50%; left: 50%; width: 
   .contact-grid { align-items: stretch; }
   .contact-info .socials:empty { display: none; }
   .contact-form { margin-top: 54.5px; }
+  .contact-info { grid-template-rows: auto 1fr; }
+  .contact-info #contactChannels { display: grid; grid-auto-rows: 1fr; gap: 16px; }
 }
