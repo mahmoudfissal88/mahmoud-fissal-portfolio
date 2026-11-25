@@ -314,7 +314,7 @@ html[data-theme="dark"] .filter-btn.active { color: #17264a; }
 .designs-empty { grid-column: 1 / -1; text-align: center; color: var(--text); opacity: .55; font-weight: 700; padding: 34px 0 10px; margin: 0; }
 
 /* Designs marquee rows */
-.dg-bleed { position: relative; left: 50%; transform: translateX(-50%); width: 100vw; }
+.dg-bleed { width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
 .dg-rows { display: flex; flex-direction: column; gap: 34px; margin-top: 34px; }
 .dg-row { overflow: hidden; direction: ltr; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
 .dg-track { display: flex; width: max-content; animation: dg-scroll 36s linear infinite; will-change: transform; }
