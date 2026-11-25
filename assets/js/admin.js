@@ -316,11 +316,19 @@
     scheduleAutoSave("portfolio");
   });
 
+  const CF_KEYS = ["name_label", "name_ph", "email_label", "email_ph", "msg_label", "msg_ph", "send", "sending", "sent", "error"]
+    .flatMap((p) => [p + "_ar", p + "_en"]);
+
   function fillContact() {
     const c = content.contact || {};
     ["email", "phone", "whatsapp", "linkedin", "facebook", "instagram"].forEach((k) => {
       const el = $("#contact_" + k);
       if (el) el.value = c[k] || "";
+    });
+    const cf = content.contact_form || {};
+    CF_KEYS.forEach((k) => {
+      const el = $("#cf_" + k);
+      if (el) el.value = cf[k] || "";
     });
   }
 
@@ -439,7 +447,14 @@
         facebook: $("#contact_facebook").value,
         instagram: $("#contact_instagram").value
       });
-      return (await upsert("contact", content.contact)).error;
+      delete content.contact.location_ar;
+      delete content.contact.location_en;
+      const cfNew = Object.assign({}, content.contact_form);
+      CF_KEYS.forEach((k) => { const el = $("#cf_" + k); if (el) cfNew[k] = el.value; });
+      content.contact_form = cfNew;
+      const e1 = (await upsert("contact", content.contact)).error;
+      if (e1) return e1;
+      return (await upsert("contact_form", content.contact_form)).error;
     },
     theme: async () => {
       $$('#colorsEditor input[type="text"]').forEach((inp) => {

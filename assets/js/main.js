@@ -193,6 +193,25 @@
       display: (v) => "@" + v.trim().replace(/^https?:\/\/(www\.)?instagram\.com\//, "").replace(/^@/, "").replace(/\/$/, "") }
   ];
 
+  function renderContactForm() {
+    const cf = content.contact_form || {};
+    const cfv = (k, d) => { const v = cf[k + "_" + lang]; return v === undefined ? d : v; };
+    [["fName", "name", "form_name"], ["fEmail", "email", "form_email"], ["fMsg", "msg", "form_message"]].forEach(([id, p, base]) => {
+      const lbl = document.querySelector(`#contactForm label[for="${id}"]`);
+      if (lbl) { const txt = cfv(p + "_label", t(base)); lbl.textContent = txt; lbl.style.display = txt === "" ? "none" : ""; }
+      const inp = $("#" + id);
+      if (inp) inp.placeholder = cfv(p + "_ph", "");
+    });
+    const sendSpan = document.querySelector('#contactForm button [data-i18n="form_send"]');
+    if (sendSpan) sendSpan.textContent = cfv("send", t("form_send"));
+  }
+
+  function formStatusText(key) {
+    const cf = content.contact_form || {};
+    const v = cf[key + "_" + lang];
+    return (v === undefined || v === "") ? t("form_" + key) : v;
+  }
+
   function renderContact() {
     const c = content.contact || {};
     const rows = CONTACT_CHANNELS
@@ -223,6 +242,7 @@
     $("#socials").innerHTML = (c.socials || [])
       .filter((s) => s.url && !fixedKeys.includes(s.id))
       .map((s) => `<a href="${s.url}" target="_blank" rel="noopener">${s.label}</a>`).join("");
+    renderContactForm();
   }
 
   /* ---------- Reveal on scroll ---------- */
@@ -267,15 +287,15 @@
     const status = $("#formStatus");
     status.className = "form-status";
     if (!supabase) { status.textContent = t("form_offline"); status.classList.add("err"); return; }
-    status.textContent = t("form_sending");
+    status.textContent = formStatusText("sending");
     const { error } = await supabase.from("contact_messages").insert({
       name: $("#fName").value.trim(),
       email: $("#fEmail").value.trim(),
       message: $("#fMsg").value.trim()
     });
-    if (error) { status.textContent = t("form_error"); status.classList.add("err"); }
+    if (error) { status.textContent = formStatusText("error"); status.classList.add("err"); }
     else {
-      status.textContent = t("form_sent"); status.classList.add("ok");
+      status.textContent = formStatusText("sent"); status.classList.add("ok");
       e.target.reset();
     }
   });
