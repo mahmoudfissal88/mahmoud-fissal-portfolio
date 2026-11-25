@@ -770,7 +770,7 @@ html[data-theme="dark"] { --shine-1: rgba(255,255,255,.98); --shine-2: rgba(255,
 .contact-info .info-row span { font-size: 1.1rem; }
 .contact-info .info-row .ic svg { width: 21px; height: 21px; }
 
-/* Services: colored "view all" button (royal blue, same family as the Home contact button) */
-.svc-more { background: #3b5bdb; border-color: #3b5bdb; color: #fff; box-shadow: 0 8px 18px rgba(59,91,219,.35); }
-.svc-more:hover { background: #4c6ef5; border-color: #4c6ef5; color: #fff; transform: translateY(-2px); box-shadow: 0 12px 24px rgba(59,91,219,.45); }
-html[data-theme="dark"] .svc-more:hover { color: #fff; }
+/* Services: yellow "view all" button, same yellow as the card icon squares */
+.svc-more { background: var(--accent); border-color: var(--accent); color: #17264a; box-shadow: 0 8px 18px rgba(245,179,1,.35); }
+.svc-more:hover { background: var(--accent); border-color: var(--accent); color: #17264a; filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 12px 24px rgba(245,179,1,.5); }
+html[data-theme="dark"] .svc-more:hover { color: #17264a; }
