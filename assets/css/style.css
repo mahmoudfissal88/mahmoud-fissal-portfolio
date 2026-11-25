@@ -665,7 +665,7 @@ html[data-theme="dark"] .hero-ctas .btn-ghost:hover { background: #4c6ef5; borde
 #heroLine1 {
   display: inline-block;
   animation: hero-rise .9s cubic-bezier(.2,.8,.25,1) .15s both, hero-shimmer 5s linear 1.2s infinite;
-  background: linear-gradient(90deg, var(--heading) 0%, #ffe38a 25%, var(--heading) 50%, #ffe38a 75%, var(--heading) 100%);
+  background: linear-gradient(90deg, var(--heading) 0%, color-mix(in srgb, var(--heading) 55%, #fff) 25%, var(--heading) 50%, color-mix(in srgb, var(--heading) 55%, #fff) 75%, var(--heading) 100%);
   background-size: 200% 100%; -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent; color: transparent;
 }
