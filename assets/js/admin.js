@@ -318,7 +318,7 @@
 
   function fillContact() {
     const c = content.contact || {};
-    ["email", "phone", "whatsapp", "telegram", "linkedin", "facebook", "instagram"].forEach((k) => {
+    ["email", "phone", "whatsapp", "linkedin", "facebook", "instagram"].forEach((k) => {
       const el = $("#contact_" + k);
       if (el) el.value = c[k] || "";
     });
@@ -435,7 +435,6 @@
       content.contact = Object.assign({}, content.contact, {
         email: $("#contact_email").value, phone: $("#contact_phone").value,
         whatsapp: $("#contact_whatsapp").value,
-        telegram: $("#contact_telegram").value,
         linkedin: $("#contact_linkedin").value,
         facebook: $("#contact_facebook").value,
         instagram: $("#contact_instagram").value
