@@ -155,23 +155,118 @@
       }).join("");
   }
 
+  /* ---------- Designs: projects marquee + coverflow ---------- */
+  let dgProject = null, dgIndex = 0;
+
+  function dgName(p) { return lang === "ar" ? (p.name_ar || p.name_en) : (p.name_en || p.name_ar); }
+  function dgDesc(p) { return lang === "ar" ? (p.desc_ar || p.desc_en) : (p.desc_en || p.desc_ar); }
+
   function renderDesigns() {
     const sec = $("#designs"), nav = $("#navDesigns");
-    const items = content.designs || [];
     if (sec) sec.style.display = "";
     if (nav) nav.style.display = "";
+    const items = content.designs || [];
+    const rows = $("#dgRows");
+    if (!rows) return;
     if (!items.length) {
-      $("#designsGrid").innerHTML = `<p class="designs-empty">${lang === "ar" ? "تصاميم جديدة في الطريق… قريباً" : "New designs on the way… soon"}</p>`;
+      rows.innerHTML = `<p class="designs-empty">${lang === "ar" ? "تصاميم جديدة في الطريق… قريباً" : "New designs on the way… soon"}</p>`;
+      $("#dgProject").style.display = "none";
+      dgProject = null;
       return;
     }
-    $("#designsGrid").innerHTML = items.map((w, i) => `
-      <div class="work-card reveal in" data-delay="${i % 3}">
-        <div class="work-media"><img src="${w.image}" alt="${lang === "ar" ? w.title_ar : w.title_en}" loading="lazy"${w.img_opacity && w.img_opacity < 100 ? ` style="opacity:${w.img_opacity / 100}"` : ""}></div>
-        <div class="work-meta">
-          <h3>${lang === "ar" ? w.title_ar : w.title_en}</h3>
-          <span class="work-cat">${lang === "ar" ? (w.category_ar || "") : (w.category_en || w.category_ar || "")}</span>
-        </div>
-      </div>`).join("");
+    const card = (list, p) => `
+      <div class="dg-card" data-p="${list === null ? 0 : items.indexOf(p)}">
+        <div class="dg-logo"><img src="${p.logo}" alt="${dgName(p)}" loading="lazy"></div>
+        <div class="dg-info"><h3>${dgName(p)}</h3><p>${dgDesc(p)}</p></div>
+      </div>`;
+    const half = (list) => {
+      let h = [];
+      while (h.length < Math.max(8, list.length * 2)) h = h.concat(list);
+      return { html: h.map((p) => card(list, p)).join(""), n: h.length };
+    };
+    const h1 = half(items), h2 = half(items.slice().reverse());
+    rows.innerHTML = `
+      <div class="dg-row"><div class="dg-track" style="animation-duration:${h1.n * 4.5}s">${h1.html}${h1.html}</div></div>
+      <div class="dg-row dg-rev"><div class="dg-track" style="animation-duration:${h2.n * 4.5}s">${h2.html}${h2.html}</div></div>`;
+    rows.querySelectorAll(".dg-card").forEach((c) =>
+      c.addEventListener("click", () => openDgProject(+c.dataset.p))
+    );
+    if (dgProject) {
+      if ((content.designs || []).includes(dgProject)) renderDgProject();
+      else { dgProject = null; $("#dgProject").style.display = "none"; }
+    }
+  }
+
+  function openDgProject(i) {
+    dgProject = (content.designs || [])[i];
+    dgIndex = 0;
+    if (!dgProject) return;
+    renderDgProject();
+    $("#dgProject").style.display = "";
+    $("#dgProject").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function renderDgProject() {
+    const box = $("#dgProject");
+    const imgs = dgProject.images || [];
+    if (!imgs.length) { box.style.display = "none"; return; }
+    box.innerHTML = `
+      <div class="dg-pj-head">
+        <button class="dg-close" id="dgClose">${lang === "ar" ? "إغلاق المشروع" : "Close project"}</button>
+        <div class="dg-pj-title"><h3>${dgName(dgProject)}</h3><p>${dgDesc(dgProject)}</p></div>
+      </div>
+      <div class="dg-stage" id="dgStage">
+        ${imgs.map((u, i) => `
+          <div class="dg-slide" data-i="${i}">
+            <img src="${u}" alt="" loading="lazy">
+            <span class="dg-view">${lang === "ar" ? "عرض التصميم" : "View design"}</span>
+          </div>`).join("")}
+      </div>
+      <div class="dg-controls">
+        <button class="dg-arrow" id="dgNext" aria-label="next">${lang === "ar" ? "›" : "›"}</button>
+        <span class="dg-counter" id="dgCounter"></span>
+        <button class="dg-arrow" id="dgPrev" aria-label="prev">‹</button>
+      </div>
+      <div class="dg-dots" id="dgDots"></div>`;
+    layoutDg();
+    $("#dgPrev").addEventListener("click", () => { dgIndex = (dgIndex - 1 + imgs.length) % imgs.length; layoutDg(); });
+    $("#dgNext").addEventListener("click", () => { dgIndex = (dgIndex + 1) % imgs.length; layoutDg(); });
+    $("#dgClose").addEventListener("click", () => { box.style.display = "none"; dgProject = null; });
+    box.querySelectorAll(".dg-slide").forEach((s) =>
+      s.addEventListener("click", () => {
+        const i = +s.dataset.i;
+        if (i !== dgIndex) { dgIndex = i; layoutDg(); }
+        else openDgLightbox(imgs[i]);
+      })
+    );
+  }
+
+  function layoutDg() {
+    const imgs = dgProject.images || [];
+    document.querySelectorAll("#dgStage .dg-slide").forEach((s) => {
+      const o = +s.dataset.i - dgIndex;
+      const ao = Math.abs(o);
+      s.className = "dg-slide" + (o === 0 ? " center" : "");
+      s.style.transform = `translate(-50%, 0) translateX(${o * 55}%) translateZ(${-ao * 170}px) rotateY(${o === 0 ? 0 : o < 0 ? 38 : -38}deg)`;
+      s.style.zIndex = 20 - ao;
+      s.style.opacity = ao > 3 ? 0 : 1 - ao * 0.2;
+      s.style.pointerEvents = ao > 3 ? "none" : "auto";
+    });
+    $("#dgCounter").textContent = lang === "ar" ? `${dgIndex + 1} من ${imgs.length}` : `${dgIndex + 1} of ${imgs.length}`;
+    $("#dgDots").innerHTML = imgs.map((_, i) => `<span class="dg-dot${i === dgIndex ? " on" : ""}"></span>`).join("");
+  }
+
+  function openDgLightbox(url) {
+    let lb = $("#dgLightbox");
+    if (!lb) {
+      lb = document.createElement("div");
+      lb.id = "dgLightbox";
+      lb.className = "dg-lightbox";
+      document.body.appendChild(lb);
+      lb.addEventListener("click", () => lb.classList.remove("open"));
+    }
+    lb.innerHTML = `<img src="${url}" alt="">`;
+    requestAnimationFrame(() => lb.classList.add("open"));
   }
 
   function renderAbout() {
@@ -317,12 +412,12 @@
           image: w.image_url, img_opacity: w.img_opacity
         }));
       }
-      const { data: dsgn } = await supabase.from("designs_items").select("*").eq("visible", true).order("sort_order");
+      const { data: dsgn } = await supabase.from("designs_projects").select("*").eq("visible", true).order("sort_order");
       if (dsgn && dsgn.length) {
-        content.designs = dsgn.map((w) => ({
-          id: w.id, title_ar: w.title_ar, title_en: w.title_en,
-          category: w.category, category_ar: w.category_ar, category_en: w.category_en,
-          image: w.image_url, img_opacity: w.img_opacity
+        content.designs = dsgn.map((p) => ({
+          id: p.id, name_ar: p.name_ar, name_en: p.name_en,
+          desc_ar: p.desc_ar, desc_en: p.desc_en,
+          logo: p.card_image_url, images: p.images || []
         }));
       }
       applyThemeColors();

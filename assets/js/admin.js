@@ -79,12 +79,11 @@
         };
       });
     }
-    const { data: dsgn } = await supabase.from("designs_items").select("*").order("sort_order");
-    content.designs = (dsgn || []).map((w) => ({
-      id: w.id, title_ar: w.title_ar, title_en: w.title_en,
-      category: w.category, category_ar: w.category_ar || "", category_en: w.category_en || "",
-      image: w.image_url, sort_order: w.sort_order, visible: w.visible,
-      img_opacity: w.img_opacity
+    const { data: dsgn } = await supabase.from("designs_projects").select("*").order("sort_order");
+    content.designs = (dsgn || []).map((p) => ({
+      id: p.id, name_ar: p.name_ar, name_en: p.name_en,
+      desc_ar: p.desc_ar || "", desc_en: p.desc_en || "",
+      logo: p.card_image_url || "", images: p.images || []
     }));
   }
 
@@ -331,51 +330,51 @@
   });
 
   function renderDesignsEditor() {
-    $("#designsEditor").innerHTML = (content.designs || []).map((w, i) => `
+    $("#designsEditor").innerHTML = (content.designs || []).map((p, i) => `
       <div class="acard" data-design="${i}">
-        <div class="tc-head ${i % 2 ? "tc-head-dark" : "tc-head-light"}"><span>${esc(w.title_ar || "تصميم جديد")}${w.title_en ? " · " + esc(w.title_en) : ""}</span>${AC_IMG}</div>
+        <div class="tc-head ${i % 2 ? "tc-head-dark" : "tc-head-light"}"><span>${esc(p.name_ar || "مشروع جديد")}${p.name_en ? " · " + esc(p.name_en) : ""}</span>${AC_IMG}</div>
         <div class="acard-body">
         <div class="form-grid">
-          <div class="field"><label>العنوان (عربي)</label><input class="d-title-ar" value="${esc(w.title_ar)}"></div>
-          <div class="field"><label>Title (EN)</label><input class="d-title-en" value="${esc(w.title_en)}"></div>
-          <div class="field"><label>القسم (عربي)</label><input class="d-cat-ar" value="${esc(w.category_ar || "")}"></div>
-          <div class="field"><label>Category (EN)</label><input class="d-cat-en" value="${esc(w.category_en || "")}"></div>
+          <div class="field"><label>اسم المشروع (عربي)</label><input class="d-name-ar" value="${esc(p.name_ar)}"></div>
+          <div class="field"><label>Project name (EN)</label><input class="d-name-en" value="${esc(p.name_en)}"></div>
+          <div class="field"><label>الوصف المختصر (عربي)</label><input class="d-desc-ar" value="${esc(p.desc_ar || "")}"></div>
+          <div class="field"><label>Short descriptor (EN)</label><input class="d-desc-en" value="${esc(p.desc_en || "")}"></div>
           <div class="field full">
-            <label>صورة التصميم · Design image</label>
+            <label>صورة البطاقة (اللوجو) · Card logo</label>
             <div class="svc-bg-admin">
-              ${w.image ? `<img src="${esc(w.image)}" alt="">` : `<span class="svc-bg-none">لا توجد صورة · No image</span>`}
+              ${p.logo ? `<img src="${esc(p.logo)}" alt="">` : `<span class="svc-bg-none">لا توجد صورة · No image</span>`}
               <input type="file" class="d-file" accept="image/*" hidden>
               <button type="button" class="small-btn d-upload">رفع · Upload</button>
-              ${w.image ? `<button type="button" class="small-btn danger d-img-del">حذف الصورة · Remove</button>` : ""}
-              <label style="display:flex;align-items:center;gap:8px;margin:0">الشفافية · Opacity
-                <input type="range" class="d-opacity" min="5" max="100" value="${w.img_opacity || 100}" style="width:120px">
-                <span class="d-op-val">${w.img_opacity || 100}%</span>
-              </label>
+              ${p.logo ? `<button type="button" class="small-btn danger d-img-del">حذف الصورة · Remove</button>` : ""}
               <span style="flex:1"></span>
-              <button type="button" class="small-btn danger d-del">حذف التصميم · Delete design</button>
+              <button type="button" class="small-btn danger d-del">حذف المشروع · Delete project</button>
+            </div>
+          </div>
+          <div class="field full">
+            <label>تصاميم المشروع · Project designs (${(p.images || []).length})</label>
+            <div class="dg-imgs">
+              ${(p.images || []).map((u, j) => `
+                <div class="dg-img"><img src="${esc(u)}" alt="" loading="lazy"><button type="button" class="dg-img-del" data-j="${j}" title="حذف · Delete">✕</button></div>`).join("")}
+              <input type="file" class="d-files" accept="image/*" multiple hidden>
+              <button type="button" class="small-btn d-add-imgs">+ إضافة صور · Add images</button>
             </div>
           </div>
         </div>
         </div>
       </div>`).join("");
 
-    $$("#designsEditor .d-opacity").forEach((r) =>
-      r.addEventListener("input", () => {
-        r.closest(".svc-bg-admin").querySelector(".d-op-val").textContent = r.value + "%";
-      })
-    );
     $$("#designsEditor .d-img-del").forEach((b) =>
       b.addEventListener("click", () => {
         const i = +b.closest("[data-design]").dataset.design;
         syncDesignsFromForm();
-        if (content.designs[i]) content.designs[i].image = "";
+        if (content.designs[i]) content.designs[i].logo = "";
         renderDesignsEditor();
         saveSection("designs");
       })
     );
     $$("#designsEditor .d-del").forEach((b) =>
       b.addEventListener("click", () => {
-        if (!confirm("حذف هذا التصميم نهائياً؟ · Delete this design permanently?")) return;
+        if (!confirm("حذف هذا المشروع وكل تصاميمه نهائياً؟ · Delete this project and all its designs permanently?")) return;
         const i = +b.closest("[data-design]").dataset.design;
         content.designs.splice(i, 1);
         renderDesignsEditor();
@@ -391,10 +390,37 @@
         const url = await uploadImage(f.files[0]);
         if (url) {
           syncDesignsFromForm();
-          if (content.designs[i]) content.designs[i].image = url;
+          if (content.designs[i]) content.designs[i].logo = url;
           renderDesignsEditor();
           saveSection("designs");
         }
+      })
+    );
+    $$("#designsEditor .d-add-imgs").forEach((b) =>
+      b.addEventListener("click", () => b.closest(".dg-imgs").querySelector(".d-files").click())
+    );
+    $$("#designsEditor .d-files").forEach((f) =>
+      f.addEventListener("change", async () => {
+        const i = +f.closest("[data-design]").dataset.design;
+        syncDesignsFromForm();
+        if (!content.designs[i]) return;
+        content.designs[i].images = content.designs[i].images || [];
+        for (const file of Array.from(f.files)) {
+          const url = await uploadImage(file);
+          if (url) content.designs[i].images.push(url);
+        }
+        renderDesignsEditor();
+        saveSection("designs");
+      })
+    );
+    $$("#designsEditor .dg-img-del").forEach((b) =>
+      b.addEventListener("click", () => {
+        const i = +b.closest("[data-design]").dataset.design;
+        const j = +b.dataset.j;
+        syncDesignsFromForm();
+        if (content.designs[i] && content.designs[i].images) content.designs[i].images.splice(j, 1);
+        renderDesignsEditor();
+        saveSection("designs");
       })
     );
   }
@@ -403,8 +429,8 @@
     syncDesignsFromForm();
     content.designs = content.designs || [];
     content.designs.push({
-      id: "d" + Date.now(), title_ar: "تصميم جديد", title_en: "New design",
-      category: "", category_ar: "", category_en: "", image: "", img_opacity: 100
+      id: "d" + Date.now(), name_ar: "مشروع جديد", name_en: "New project",
+      desc_ar: "", desc_en: "", logo: "", images: []
     });
     renderDesignsEditor();
     scheduleAutoSave("designs");
@@ -587,11 +613,10 @@
     $$("#designsEditor [data-design]").forEach((row) => {
       const i = +row.dataset.design;
       if (!content.designs[i]) return;
-      content.designs[i].title_ar = row.querySelector(".d-title-ar").value;
-      content.designs[i].title_en = row.querySelector(".d-title-en").value;
-      content.designs[i].category_ar = row.querySelector(".d-cat-ar").value;
-      content.designs[i].category_en = row.querySelector(".d-cat-en").value;
-      content.designs[i].img_opacity = +row.querySelector(".d-opacity").value;
+      content.designs[i].name_ar = row.querySelector(".d-name-ar").value;
+      content.designs[i].name_en = row.querySelector(".d-name-en").value;
+      content.designs[i].desc_ar = row.querySelector(".d-desc-ar").value;
+      content.designs[i].desc_en = row.querySelector(".d-desc-en").value;
     });
   }
 
@@ -641,14 +666,13 @@
     },
     designs: async () => {
       syncDesignsFromForm();
-      await supabase.from("designs_items").delete().neq("id", "00000000-0000-0000-0000-000000000000");
-      const rows = (content.designs || []).map((w, i) => ({
-        title_ar: w.title_ar, title_en: w.title_en, category: w.category || "",
-        category_ar: w.category_ar || "", category_en: w.category_en || "",
-        image_url: w.image, sort_order: i, visible: true, img_opacity: w.img_opacity || 100
+      await supabase.from("designs_projects").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+      const rows = (content.designs || []).map((p, i) => ({
+        name_ar: p.name_ar, name_en: p.name_en, desc_ar: p.desc_ar || "", desc_en: p.desc_en || "",
+        card_image_url: p.logo || "", images: p.images || [], sort_order: i, visible: true
       }));
       if (!rows.length) return null;
-      return (await supabase.from("designs_items").insert(rows)).error;
+      return (await supabase.from("designs_projects").insert(rows)).error;
     },
     contact: async () => {
       content.contact = Object.assign({}, content.contact, {
