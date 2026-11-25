@@ -27,6 +27,21 @@ create table if not exists public.portfolio_items (
   created_at timestamptz not null default now()
 );
 
+-- 2b. Designs (تصاميم) — same shape as portfolio items
+create table if not exists public.designs_items (
+  id uuid primary key default gen_random_uuid(),
+  title_ar text not null default '',
+  title_en text not null default '',
+  category text not null default '',
+  category_ar text not null default '',
+  category_en text not null default '',
+  image_url text not null default '',
+  img_opacity integer not null default 100,
+  sort_order integer not null default 0,
+  visible boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
 -- 3. Visitor contact messages
 create table if not exists public.contact_messages (
   id bigint generated always as identity primary key,
@@ -40,6 +55,7 @@ create table if not exists public.contact_messages (
 -- 4. Row level security
 alter table public.site_content enable row level security;
 alter table public.portfolio_items enable row level security;
+alter table public.designs_items enable row level security;
 alter table public.contact_messages enable row level security;
 
 -- Everyone (anon) can read content; only the logged-in admin can write.
@@ -52,6 +68,12 @@ create policy "admin write content" on public.site_content
 create policy "public read portfolio" on public.portfolio_items
   for select using (true);
 create policy "admin write portfolio" on public.portfolio_items
+  for all using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');
+
+create policy "public read designs" on public.designs_items
+  for select using (true);
+create policy "admin write designs" on public.designs_items
   for all using (auth.role() = 'authenticated')
   with check (auth.role() = 'authenticated');
 

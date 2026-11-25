@@ -53,6 +53,7 @@
     renderMarquee();
     renderServices();
     renderPortfolio();
+    renderDesigns();
     renderAbout();
     renderContact();
     observeReveals();
@@ -152,6 +153,26 @@
         </div>
       </div>`;
       }).join("");
+  }
+
+  function renderDesigns() {
+    const sec = $("#designs"), nav = $("#navDesigns");
+    const items = content.designs || [];
+    if (!items.length) {
+      if (sec) sec.style.display = "none";
+      if (nav) nav.style.display = "none";
+      return;
+    }
+    if (sec) sec.style.display = "";
+    if (nav) nav.style.display = "";
+    $("#designsGrid").innerHTML = items.map((w, i) => `
+      <div class="work-card reveal in" data-delay="${i % 3}">
+        <div class="work-media"><img src="${w.image}" alt="${lang === "ar" ? w.title_ar : w.title_en}" loading="lazy"${w.img_opacity && w.img_opacity < 100 ? ` style="opacity:${w.img_opacity / 100}"` : ""}></div>
+        <div class="work-meta">
+          <h3>${lang === "ar" ? w.title_ar : w.title_en}</h3>
+          <span class="work-cat">${lang === "ar" ? (w.category_ar || "") : (w.category_en || w.category_ar || "")}</span>
+        </div>
+      </div>`).join("");
   }
 
   function renderAbout() {
@@ -292,6 +313,14 @@
       const { data: works } = await supabase.from("portfolio_items").select("*").eq("visible", true).order("sort_order");
       if (works && works.length) {
         content.portfolio = works.map((w) => ({
+          id: w.id, title_ar: w.title_ar, title_en: w.title_en,
+          category: w.category, category_ar: w.category_ar, category_en: w.category_en,
+          image: w.image_url, img_opacity: w.img_opacity
+        }));
+      }
+      const { data: dsgn } = await supabase.from("designs_items").select("*").eq("visible", true).order("sort_order");
+      if (dsgn && dsgn.length) {
+        content.designs = dsgn.map((w) => ({
           id: w.id, title_ar: w.title_ar, title_en: w.title_en,
           category: w.category, category_ar: w.category_ar, category_en: w.category_en,
           image: w.image_url, img_opacity: w.img_opacity

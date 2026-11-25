@@ -79,6 +79,13 @@
         };
       });
     }
+    const { data: dsgn } = await supabase.from("designs_items").select("*").order("sort_order");
+    content.designs = (dsgn || []).map((w) => ({
+      id: w.id, title_ar: w.title_ar, title_en: w.title_en,
+      category: w.category, category_ar: w.category_ar || "", category_en: w.category_en || "",
+      image: w.image_url, sort_order: w.sort_order, visible: w.visible,
+      img_opacity: w.img_opacity
+    }));
   }
 
   /* ---------- Tabs ---------- */
@@ -115,6 +122,7 @@
 
     renderServicesEditor();
     renderPortfolioEditor();
+    renderDesignsEditor();
     fillContact();
     renderColorsEditor();
   }
@@ -322,6 +330,87 @@
     scheduleAutoSave("portfolio");
   });
 
+  function renderDesignsEditor() {
+    $("#designsEditor").innerHTML = (content.designs || []).map((w, i) => `
+      <div class="acard" data-design="${i}">
+        <div class="tc-head ${i % 2 ? "tc-head-dark" : "tc-head-light"}"><span>${esc(w.title_ar || "تصميم جديد")}${w.title_en ? " · " + esc(w.title_en) : ""}</span>${AC_IMG}</div>
+        <div class="acard-body">
+        <div class="form-grid">
+          <div class="field"><label>العنوان (عربي)</label><input class="d-title-ar" value="${esc(w.title_ar)}"></div>
+          <div class="field"><label>Title (EN)</label><input class="d-title-en" value="${esc(w.title_en)}"></div>
+          <div class="field"><label>القسم (عربي)</label><input class="d-cat-ar" value="${esc(w.category_ar || "")}"></div>
+          <div class="field"><label>Category (EN)</label><input class="d-cat-en" value="${esc(w.category_en || "")}"></div>
+          <div class="field full">
+            <label>صورة التصميم · Design image</label>
+            <div class="svc-bg-admin">
+              ${w.image ? `<img src="${esc(w.image)}" alt="">` : `<span class="svc-bg-none">لا توجد صورة · No image</span>`}
+              <input type="file" class="d-file" accept="image/*" hidden>
+              <button type="button" class="small-btn d-upload">رفع · Upload</button>
+              ${w.image ? `<button type="button" class="small-btn danger d-img-del">حذف الصورة · Remove</button>` : ""}
+              <label style="display:flex;align-items:center;gap:8px;margin:0">الشفافية · Opacity
+                <input type="range" class="d-opacity" min="5" max="100" value="${w.img_opacity || 100}" style="width:120px">
+                <span class="d-op-val">${w.img_opacity || 100}%</span>
+              </label>
+              <span style="flex:1"></span>
+              <button type="button" class="small-btn danger d-del">حذف التصميم · Delete design</button>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>`).join("");
+
+    $$("#designsEditor .d-opacity").forEach((r) =>
+      r.addEventListener("input", () => {
+        r.closest(".svc-bg-admin").querySelector(".d-op-val").textContent = r.value + "%";
+      })
+    );
+    $$("#designsEditor .d-img-del").forEach((b) =>
+      b.addEventListener("click", () => {
+        const i = +b.closest("[data-design]").dataset.design;
+        syncDesignsFromForm();
+        if (content.designs[i]) content.designs[i].image = "";
+        renderDesignsEditor();
+        saveSection("designs");
+      })
+    );
+    $$("#designsEditor .d-del").forEach((b) =>
+      b.addEventListener("click", () => {
+        if (!confirm("حذف هذا التصميم نهائياً؟ · Delete this design permanently?")) return;
+        const i = +b.closest("[data-design]").dataset.design;
+        content.designs.splice(i, 1);
+        renderDesignsEditor();
+        saveSection("designs");
+      })
+    );
+    $$("#designsEditor .d-upload").forEach((b) =>
+      b.addEventListener("click", () => b.closest(".svc-bg-admin").querySelector(".d-file").click())
+    );
+    $$("#designsEditor .d-file").forEach((f) =>
+      f.addEventListener("change", async () => {
+        const i = +f.closest("[data-design]").dataset.design;
+        const url = await uploadImage(f.files[0]);
+        if (url) {
+          syncDesignsFromForm();
+          if (content.designs[i]) content.designs[i].image = url;
+          renderDesignsEditor();
+          saveSection("designs");
+        }
+      })
+    );
+  }
+
+  $("#addDesignBtn").addEventListener("click", () => {
+    syncDesignsFromForm();
+    content.designs = content.designs || [];
+    content.designs.push({
+      id: "d" + Date.now(), title_ar: "تصميم جديد", title_en: "New design",
+      category: "", category_ar: "", category_en: "", image: "", img_opacity: 100
+    });
+    renderDesignsEditor();
+    scheduleAutoSave("designs");
+    $("#addDesignBtn").scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+
   const CF_TEXT_KEYS = ["send", "sending", "sent", "error"].flatMap((p) => [p + "_ar", p + "_en"]);
 
   const EYE_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>';
@@ -494,6 +583,18 @@
     });
   }
 
+  function syncDesignsFromForm() {
+    $$("#designsEditor [data-design]").forEach((row) => {
+      const i = +row.dataset.design;
+      if (!content.designs[i]) return;
+      content.designs[i].title_ar = row.querySelector(".d-title-ar").value;
+      content.designs[i].title_en = row.querySelector(".d-title-en").value;
+      content.designs[i].category_ar = row.querySelector(".d-cat-ar").value;
+      content.designs[i].category_en = row.querySelector(".d-cat-en").value;
+      content.designs[i].img_opacity = +row.querySelector(".d-opacity").value;
+    });
+  }
+
   async function upsert(key, value) {
     return supabase.from("site_content").upsert({ key, value });
   }
@@ -538,6 +639,17 @@
       if (!rows.length) return null;
       return (await supabase.from("portfolio_items").insert(rows)).error;
     },
+    designs: async () => {
+      syncDesignsFromForm();
+      await supabase.from("designs_items").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+      const rows = (content.designs || []).map((w, i) => ({
+        title_ar: w.title_ar, title_en: w.title_en, category: w.category || "",
+        category_ar: w.category_ar || "", category_en: w.category_en || "",
+        image_url: w.image, sort_order: i, visible: true, img_opacity: w.img_opacity || 100
+      }));
+      if (!rows.length) return null;
+      return (await supabase.from("designs_items").insert(rows)).error;
+    },
     contact: async () => {
       content.contact = Object.assign({}, content.contact, {
         email: $("#contact_email").value, phone: $("#contact_phone").value,
@@ -567,7 +679,7 @@
   };
 
   /* ---------- Auto-save: any edit in a panel saves itself ---------- */
-  const PANEL_TO_SAVER = { hero: "hero", about: "about", services: "services", portfolio: "portfolio", contact: "contact", colors: "theme" };
+  const PANEL_TO_SAVER = { hero: "hero", about: "about", services: "services", portfolio: "portfolio", designs: "designs", contact: "contact", colors: "theme" };
   const autoSaveTimers = {};
   let saving = false;
   const pendingSaves = [];
