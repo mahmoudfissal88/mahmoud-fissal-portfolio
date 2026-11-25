@@ -329,7 +329,7 @@ html[data-theme="dark"] .filter-btn.active { color: #17264a; }
 .dg-info p { margin: 0; font-size: .8rem; color: #b9bdc7; }
 
 /* Designs project coverflow */
-.dg-project { margin-top: 46px; border-top: 1px solid var(--border); padding-top: 26px; }
+.dg-project { margin-top: 46px; border-top: 1px solid var(--border); padding-top: 26px; scroll-margin-top: 100px; }
 .dg-pj-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 8px; }
 .dg-pj-title { margin-inline-end: auto; text-align: start; }
 .dg-pj-title h3 { font-size: 1.5rem; font-weight: 800; color: var(--heading); margin: 0 0 2px; }
