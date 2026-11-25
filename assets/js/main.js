@@ -451,6 +451,24 @@
     document.querySelectorAll(".reveal:not(.in)").forEach((el) => observer.observe(el));
   }
 
+  /* ---------- Editable section headings (admin: Home > Section headings) ---------- */
+  function mdToHtml(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/\*\*(.+?)\*\*/g, "<span class='hl'>$1</span>");
+  }
+  function applyHeadings() {
+    const h = content.headings;
+    if (!h || typeof h !== "object") return;
+    Object.keys(h).forEach((k) => {
+      const e = h[k] || {};
+      ["ar", "en"].forEach((l) => {
+        if (!UI_STRINGS[l] || !(k in UI_STRINGS[l])) return;
+        if (e.hidden) UI_STRINGS[l][k] = "";
+        else if (typeof e[l] === "string") UI_STRINGS[l][k] = mdToHtml(e[l]);
+      });
+    });
+  }
+
   /* ---------- Supabase ---------- */
   async function loadRemoteContent() {
     if (!SUPABASE_URL || !SUPABASE_ANON_KEY || typeof window.supabase === "undefined") { if (window.__mfReveal) window.__mfReveal(); return; }
@@ -480,6 +498,7 @@
           logo: p.card_image_url, images: p.images || []
         }));
       }
+      applyHeadings();
       applyThemeColors();
       applyLang();
       if (window.__mfReveal) window.__mfReveal();

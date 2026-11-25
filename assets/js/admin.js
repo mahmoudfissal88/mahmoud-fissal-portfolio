@@ -113,6 +113,7 @@
     $("#hero_image").value = content.hero.image || "";
     renderStatsEditor();
     fillMarqueeFooter();
+    renderHeadingsEditor();
 
     $("#about_text_ar").value = content.about.text_ar || "";
     $("#about_text_en").value = content.about.text_en || "";
@@ -638,6 +639,60 @@
     });
   }
 
+
+  /* ---------- Section headings editor (Home tab) ---------- */
+  const HEADING_KEYS = [
+    ["services_title", "عنوان قسم الخدمات"], ["services_sub", "نص تحت عنوان الخدمات"],
+    ["portfolio_title", "عنوان قسم الأعمال"], ["portfolio_sub", "نص تحت عنوان الأعمال"],
+    ["designs_title", "عنوان قسم التصاميم"], ["designs_sub", "نص تحت عنوان التصاميم"],
+    ["about_kicker", "عنوان صغير فوق قسم نبذة عني"], ["about_title", "عنوان قسم نبذة عني"],
+    ["contact_title", "عنوان قسم التواصل"], ["contact_sub", "نص تحت عنوان التواصل"],
+    ["contact_info_title", "عنوان بيانات التواصل"], ["form_title", "عنوان نموذج الرسائل"]
+  ];
+  const hlToMd = (s) => String(s || "").replace(/<span class=['"]hl['"]>(.*?)<\/span>/g, "**$1**");
+  const defaultHeading = (k, l) => hlToMd(UI_STRINGS[l] && UI_STRINGS[l][k]);
+  function renderHeadingsEditor() {
+    const box = $("#headingsEditor");
+    if (!box) return;
+    const cur = content.headings || {};
+    box.innerHTML = HEADING_KEYS.map(([k, label]) => {
+      const c = cur[k] || {};
+      const ar = c.ar != null ? c.ar : defaultHeading(k, "ar");
+      const en = c.en != null ? c.en : defaultHeading(k, "en");
+      return `<div class="hd-row" data-k="${k}" style="border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:12px">
+        <div style="font-weight:800;margin-bottom:8px">${label}</div>
+        <div class="form-grid">
+          <div class="field"><label>عربي</label><input class="hd-ar" value="${esc(ar)}"></div>
+          <div class="field"><label>English</label><input class="hd-en" value="${esc(en)}"></div>
+        </div>
+        <div style="display:flex;gap:18px;align-items:center;margin-top:8px;flex-wrap:wrap">
+          <label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" class="hd-hide" style="width:auto" ${c.hidden ? "checked" : ""}> إخفاء من الموقع · Hide</label>
+          <button type="button" class="small-btn hd-reset">استرجاع الأصلي · Reset</button>
+        </div></div>`;
+    }).join("");
+    $$("#headingsEditor .hd-reset").forEach((b) => b.addEventListener("click", () => {
+      const row = b.closest(".hd-row"), k = row.dataset.k;
+      row.querySelector(".hd-ar").value = defaultHeading(k, "ar");
+      row.querySelector(".hd-en").value = defaultHeading(k, "en");
+      row.querySelector(".hd-hide").checked = false;
+      scheduleAutoSave("hero");
+    }));
+  }
+  function collectHeadings() {
+    const out = {};
+    $$("#headingsEditor .hd-row").forEach((row) => {
+      const k = row.dataset.k;
+      const ar = row.querySelector(".hd-ar").value.trim(), en = row.querySelector(".hd-en").value.trim();
+      const hidden = row.querySelector(".hd-hide").checked;
+      const e = {};
+      if (ar !== defaultHeading(k, "ar")) e.ar = ar;
+      if (en !== defaultHeading(k, "en")) e.en = en;
+      if (hidden) e.hidden = true;
+      if (Object.keys(e).length) out[k] = e;
+    });
+    return out;
+  }
+
   async function upsert(key, value) {
     return supabase.from("site_content").upsert({ key, value });
   }
@@ -671,7 +726,12 @@
       const r2 = await upsert("hero", content.hero);
       const r3 = await upsert("marquee", content.marquee);
       const r4 = await upsert("footer", content.footer);
-      return r1.error || r2.error || r3.error || r4.error;
+      let r5 = {};
+      if ($("#headingsEditor") && $("#headingsEditor").children.length) {
+        content.headings = collectHeadings();
+        r5 = await upsert("headings", content.headings);
+      }
+      return r1.error || r2.error || r3.error || r4.error || r5.error;
     },
     about: async () => {
       content.about = Object.assign({}, content.about, {
