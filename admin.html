@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=1795589979">
+  <link rel="stylesheet" href="assets/css/style.css?v=1795590191">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%231f3ab0'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23ffc61a' font-family='sans-serif' font-weight='900'>M</text></svg>">
 </head>
 <body>
@@ -41,9 +41,9 @@
       </div>
       <div class="admin-tabs">
         <button class="admin-tab active" data-panel="hero">الرئيسية</button>
-        <button class="admin-tab" data-panel="about">نبذة عني</button>
         <button class="admin-tab" data-panel="services">الخدمات</button>
         <button class="admin-tab" data-panel="portfolio">الأعمال</button>
+        <button class="admin-tab" data-panel="about">نبذة عني</button>
         <button class="admin-tab" data-panel="contact">التواصل</button>
         <button class="admin-tab" data-panel="colors">الألوان</button>
         <button class="admin-tab" data-panel="messages">الرسائل</button>
@@ -95,6 +95,26 @@
     </div>
 
     <!-- About panel -->
+    <div class="admin-panel" data-panel="services">
+      <h2>الخدمات · Services</h2>
+      <div id="servicesEditor"></div>
+      <button class="btn" id="addServiceBtn" style="margin-top:16px;width:100%">＋ إضافة قسم جديد · Add category</button>
+      <div class="admin-actions">
+        <span class="save-status" id="status-services"></span>
+      </div>
+    </div>
+
+    <!-- Portfolio panel -->
+    <div class="admin-panel" data-panel="portfolio">
+      <h2>الأعمال · Portfolio</h2>
+      <div id="portfolioEditor"></div>
+      <div class="admin-actions">
+        <button class="small-btn primary" id="addWorkBtn">+ إضافة عمل</button>
+        <span class="save-status" id="status-portfolio"></span>
+      </div>
+    </div>
+
+    <!-- Contact panel -->
     <div class="admin-panel" data-panel="about">
       <h2>نبذة عني · About</h2>
       <div class="acard">
@@ -121,26 +141,6 @@
     </div>
 
     <!-- Services panel -->
-    <div class="admin-panel" data-panel="services">
-      <h2>الخدمات · Services</h2>
-      <div id="servicesEditor"></div>
-      <button class="btn" id="addServiceBtn" style="margin-top:16px;width:100%">＋ إضافة قسم جديد · Add category</button>
-      <div class="admin-actions">
-        <span class="save-status" id="status-services"></span>
-      </div>
-    </div>
-
-    <!-- Portfolio panel -->
-    <div class="admin-panel" data-panel="portfolio">
-      <h2>الأعمال · Portfolio</h2>
-      <div id="portfolioEditor"></div>
-      <div class="admin-actions">
-        <button class="small-btn primary" id="addWorkBtn">+ إضافة عمل</button>
-        <span class="save-status" id="status-portfolio"></span>
-      </div>
-    </div>
-
-    <!-- Contact panel -->
     <div class="admin-panel" data-panel="contact">
       <h2>التواصل · Contact</h2>
       <div class="acard">
@@ -212,8 +212,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/config.js?v=1795589979"></script>
-  <script src="assets/js/content.js?v=1795589979"></script>
-  <script src="assets/js/admin.js?v=1795589979"></script>
+  <script src="assets/js/config.js?v=1795590191"></script>
+  <script src="assets/js/content.js?v=1795590191"></script>
+  <script src="assets/js/admin.js?v=1795590191"></script>
 </body>
 </html>
