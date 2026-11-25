@@ -753,3 +753,19 @@ html[data-theme="dark"] { --shine-1: rgba(255,255,255,.98); --shine-2: rgba(255,
   #formFields .field:last-child { flex: 1; grid-template-rows: auto 1fr; }
   #formFields .field:last-child textarea { height: 100%; min-height: 130px; resize: none; }
 }
+
+/* Contact: compact boxes, form title, larger info text */
+.form-title { font-size: 1.2rem; font-weight: 800; margin: 0; }
+.contact-grid { max-width: 1040px; margin-inline: auto; gap: 28px; }
+@media (min-width: 900px) {
+  .contact-info { padding: 24px; gap: 12px; }
+  .contact-form { padding: 24px; gap: 12px; }
+  #formFields { gap: 12px; }
+  #formFields .field:last-child textarea { min-height: 90px; }
+  .contact-info .info-row { padding: 10px 16px; gap: 14px; }
+  .contact-info .info-row .ic { width: 42px; height: 42px; }
+}
+.contact-info #contactChannels { gap: 10px; }
+.contact-info .info-row b { font-size: .95rem; }
+.contact-info .info-row span { font-size: 1.1rem; }
+.contact-info .info-row .ic svg { width: 21px; height: 21px; }
