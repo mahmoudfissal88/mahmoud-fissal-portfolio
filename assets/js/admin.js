@@ -117,6 +117,8 @@
     renderPortfolioEditor();
     fillContact();
     renderColorsEditor();
+    renderAdminColorsEditor();
+    applyAdminTheme();
   }
 
   function renderStatsEditor() {
@@ -421,43 +423,88 @@
   const TC_MOON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
   const TC_COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
 
-  function renderColorsEditor() {
-    $("#colorsEditor").innerHTML = `<div class="theme-cards">` +
+  function adminMode() { return localStorage.getItem("mf-theme") || "light"; }
+
+  function applyAdminTheme() {
+    const mode = adminMode();
+    document.documentElement.setAttribute("data-theme", mode);
+    const ta = (content.theme_admin && content.theme_admin[mode]) || {};
+    const root = document.documentElement.style;
+    ["accent", "heading", "bg"].forEach((k) => {
+      if (ta[k]) root.setProperty("--" + k, ta[k]); else root.removeProperty("--" + k);
+    });
+    const btn = $("#adminThemeBtn");
+    if (btn) btn.textContent = mode === "light" ? "🌙" : "☀️";
+  }
+
+  function applyAdminFromInputs() {
+    const mode = adminMode();
+    $$('#adminColorsEditor input[type="text"]').forEach((inp) => {
+      if (inp.dataset.mode === mode && /^#[0-9a-fA-F]{6}$/.test(inp.value))
+        document.documentElement.style.setProperty("--" + inp.dataset.key, inp.value);
+    });
+  }
+
+  function wireThemeEditor(containerSel) {
+    $$(containerSel + " .tc-copy").forEach((b) =>
+      b.addEventListener("click", () => {
+        const inp = $(`${containerSel} input[type="text"][data-mode="${b.dataset.mode}"][data-key="${b.dataset.key}"]`);
+        if (inp && navigator.clipboard) navigator.clipboard.writeText(inp.value).catch(() => {});
+      })
+    );
+    $$(containerSel + ' input[type="color"]').forEach((c) =>
+      c.addEventListener("input", () => {
+        $(`${containerSel} input[type="text"][data-mode="${c.dataset.mode}"][data-key="${c.dataset.key}"]`).value = c.value;
+        if (containerSel === "#adminColorsEditor") applyAdminFromInputs();
+      })
+    );
+    $$(containerSel + ' input[type="text"]').forEach((c) =>
+      c.addEventListener("input", () => {
+        if (/^#[0-9a-fA-F]{6}$/.test(c.value))
+          $(`${containerSel} input[type="color"][data-mode="${c.dataset.mode}"][data-key="${c.dataset.key}"]`).value = c.value;
+        if (containerSel === "#adminColorsEditor") applyAdminFromInputs();
+      })
+    );
+  }
+
+  function themeCardsHTML(obj) {
+    return `<div class="theme-cards">` +
       ["light", "dark"].map((mode) => `
       <div class="theme-card">
         <div class="tc-head tc-head-${mode}"><span>${mode === "light" ? "الوضع الفاتح · Light" : "الوضع الغامق · Dark"}</span>${mode === "light" ? TC_SUN : TC_MOON}</div>
         <div class="tc-body">
           ${COLOR_FIELDS.map(([k, label]) => `
             <div class="tc-row">
-              <span class="tc-swatch"><input type="color" data-mode="${mode}" data-key="${k}" value="${content.theme[mode][k] || "#000000"}"></span>
+              <span class="tc-swatch"><input type="color" data-mode="${mode}" data-key="${k}" value="${obj[mode][k] || "#000000"}"></span>
               <div class="tc-info">
                 <div class="tc-label">${label}</div>
                 <div class="tc-hex">
-                  <input type="text" data-mode="${mode}" data-key="${k}" value="${content.theme[mode][k] || ""}">
+                  <input type="text" data-mode="${mode}" data-key="${k}" value="${obj[mode][k] || ""}">
                   <button type="button" class="tc-copy" data-mode="${mode}" data-key="${k}" title="نسخ · Copy">${TC_COPY}</button>
                 </div>
               </div>
             </div>`).join("")}
         </div>
       </div>`).join("") + `</div>`;
-    $$("#colorsEditor .tc-copy").forEach((b) =>
-      b.addEventListener("click", () => {
-        const inp = $(`#colorsEditor input[type="text"][data-mode="${b.dataset.mode}"][data-key="${b.dataset.key}"]`);
-        if (inp && navigator.clipboard) navigator.clipboard.writeText(inp.value).catch(() => {});
-      })
-    );
-    $$('#colorsEditor input[type="color"]').forEach((c) =>
-      c.addEventListener("input", () => {
-        $(`#colorsEditor input[type="text"][data-mode="${c.dataset.mode}"][data-key="${c.dataset.key}"]`).value = c.value;
-      })
-    );
-    $$('#colorsEditor input[type="text"]').forEach((c) =>
-      c.addEventListener("input", () => {
-        if (/^#[0-9a-fA-F]{6}$/.test(c.value))
-          $(`#colorsEditor input[type="color"][data-mode="${c.dataset.mode}"][data-key="${c.dataset.key}"]`).value = c.value;
-      })
-    );
   }
+
+  function renderColorsEditor() {
+    $("#colorsEditor").innerHTML = themeCardsHTML(content.theme);
+    wireThemeEditor("#colorsEditor");
+  }
+
+  function renderAdminColorsEditor() {
+    if (!content.theme_admin || !content.theme_admin.light || !content.theme_admin.dark)
+      content.theme_admin = JSON.parse(JSON.stringify(DEFAULT_CONTENT.theme_admin));
+    $("#adminColorsEditor").innerHTML = themeCardsHTML(content.theme_admin);
+    wireThemeEditor("#adminColorsEditor");
+  }
+
+  $("#adminThemeBtn").addEventListener("click", () => {
+    localStorage.setItem("mf-theme", adminMode() === "light" ? "dark" : "light");
+    applyAdminTheme();
+  });
+  applyAdminTheme();
 
   /* ---------- Image upload ---------- */
   async function uploadImage(file) {
@@ -562,7 +609,16 @@
       $$('#colorsEditor input[type="text"]').forEach((inp) => {
         content.theme[inp.dataset.mode][inp.dataset.key] = inp.value;
       });
-      return (await upsert("theme", content.theme)).error;
+      if (content.theme_admin) {
+        $$('#adminColorsEditor input[type="text"]').forEach((inp) => {
+          content.theme_admin[inp.dataset.mode][inp.dataset.key] = inp.value;
+        });
+      }
+      const e1 = (await upsert("theme", content.theme)).error;
+      if (e1) return e1;
+      const e2 = (await upsert("theme_admin", content.theme_admin)).error;
+      applyAdminTheme();
+      return e2;
     }
   };
 
