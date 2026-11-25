@@ -663,7 +663,7 @@
         <div style="font-weight:800;margin-bottom:8px">${label}</div>
         <div class="form-grid">
           <div class="field"><label>عربي</label><input class="hd-ar" value="${esc(ar)}"></div>
-          <div class="field"><label>English</label><input class="hd-en" value="${esc(en)}"></div>
+          <div class="field"><label>English</label><input class="hd-en" dir="ltr" value="${esc(en)}"></div>
         </div>
         <div style="display:flex;gap:18px;align-items:center;margin-top:8px;flex-wrap:wrap">
           <label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" class="hd-hide" style="width:auto" ${c.hidden ? "checked" : ""}> إخفاء من الموقع · Hide</label>
