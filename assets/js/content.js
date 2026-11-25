@@ -8,7 +8,7 @@ const UI_STRINGS = {
     nav_home: "الرئيسية",
     nav_services: "الخدمات",
     nav_portfolio: "أعمالي",
-    nav_about: "عنّي",
+    nav_about: "نبذة عني",
     nav_contact: "تواصل",
     nav_cta: "ابدأ مشروعك",
     hero_badge: "مصمم جرافيك ومطوّر محتوى تعليمي",
