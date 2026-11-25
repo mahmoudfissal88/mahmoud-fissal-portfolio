@@ -621,10 +621,18 @@
     if (error) { list.innerHTML = "<p>" + error.message + "</p>"; return; }
     if (!data || !data.length) { list.innerHTML = "<p style='color:var(--muted)'>لا رسائل بعد · No messages yet.</p>"; return; }
     list.innerHTML = data.map((m) => `
-      <div class="msg-item ${m.read ? "" : "unread"}">
-        <div class="meta"><span><b>${esc(m.name || "")}</b> — ${esc(m.email || "")}</span><span>${new Date(m.created_at).toLocaleString()}</span></div>
+      <div class="msg-item ${m.read ? "" : "unread"}" data-mid="${m.id}">
+        <div class="meta"><span><b>${esc(m.name || "")}</b> — ${esc(m.email || "")}</span><span style="display:flex;align-items:center;gap:8px">${new Date(m.created_at).toLocaleString()}<button type="button" class="small-btn danger msg-del" data-mid="${m.id}" title="حذف · Delete" style="padding:4px 8px">${TRASH}</button></span></div>
         <p>${esc(m.message || "")}</p>
       </div>`).join("");
+    $$("#messagesList .msg-del").forEach((b) =>
+      b.addEventListener("click", async () => {
+        if (!confirm("حذف هذه الرسالة نهائياً؟ · Delete this message permanently?")) return;
+        const { error: dErr } = await supabase.from("contact_messages").delete().eq("id", b.dataset.mid);
+        if (dErr) { alert("Delete failed: " + dErr.message); return; }
+        loadMessages();
+      })
+    );
   }
 
   /* ---------- Helpers ---------- */

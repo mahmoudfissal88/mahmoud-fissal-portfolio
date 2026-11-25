@@ -63,12 +63,14 @@ create policy "admin reads messages" on public.contact_messages
 create policy "admin updates messages" on public.contact_messages
   for update using (auth.role() = 'authenticated')
   with check (auth.role() = 'authenticated');
+create policy "admin deletes messages" on public.contact_messages
+  for delete using (auth.role() = 'authenticated');
 
 -- 4b. Table grants (needed when created via raw SQL)
 grant select on public.site_content to anon, authenticated;
 grant select on public.portfolio_items to anon, authenticated;
 grant insert on public.contact_messages to anon, authenticated;
-grant select, update on public.contact_messages to authenticated;
+grant select, update, delete on public.contact_messages to authenticated;
 grant insert, update, delete on public.site_content to authenticated;
 grant insert, update, delete on public.portfolio_items to authenticated;
 
