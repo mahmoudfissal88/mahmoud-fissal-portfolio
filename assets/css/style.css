@@ -586,3 +586,17 @@ html[data-theme="dark"] .admin-tab.active { color: #17264a; }
 .svc-bg-admin { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .svc-bg-admin img { width: 96px; height: 64px; object-fit: cover; border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(23,38,74,.12); }
 .svc-bg-none { color: var(--muted); font-size: .85rem; }
+
+/* Services cards: centered text style (title, count, outlined pill button) */
+.service-card { text-align: center; }
+.service-card .service-icon { margin-inline: auto; }
+.service-card h3 { color: var(--heading); font-size: 1.3rem; margin-bottom: 8px; }
+.service-card .service-count { font-size: .95rem; font-weight: 500; color: var(--text); opacity: .85; }
+.service-card details { margin-top: 18px; }
+.service-card summary {
+  justify-content: center; padding: 11px 26px; font-size: .92rem;
+  background: var(--accent-soft); border: 1.5px solid var(--heading); color: var(--heading);
+}
+.service-card summary:hover { background: var(--heading); color: #fff; border-color: var(--heading); }
+html[data-theme="dark"] .service-card summary:hover { color: #17264a; }
+.service-card .chip-list { justify-content: center; }
