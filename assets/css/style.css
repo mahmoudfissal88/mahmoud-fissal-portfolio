@@ -445,7 +445,9 @@ html[data-theme="dark"] .login-logo { color: #17264a; }
   border-radius: var(--radius); padding: 14px 20px; margin-bottom: 24px;
   position: sticky; top: 12px; z-index: 50; backdrop-filter: blur(10px);
 }
-.admin-topbar h1 { font-size: 1.05rem; font-weight: 800; }
+.admin-brand { display: flex; flex-direction: column; gap: 2px; line-height: 1.2; }
+.admin-topbar h1 { font-size: 1.5rem; font-weight: 800; color: var(--heading); }
+.admin-brand span { font-size: .82rem; font-weight: 700; color: #0ea5e9; }
 .admin-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-inline-start: auto; }
 .admin-tab {
   padding: 9px 18px; border-radius: 999px; border: 1px solid var(--border);
