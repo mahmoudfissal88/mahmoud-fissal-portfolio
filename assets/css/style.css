@@ -124,7 +124,7 @@ html[data-theme="dark"] .btn-ghost:hover { color: #17264a; }
 @media (min-width: 900px) { .nav-cta { display: inline-flex; padding: 11px 22px; } }
 
 .burger { display: none; }
-@media (max-width: 899px) {
+@media (max-width: 760px) {
   .burger { display: grid; }
   .main-nav {
     position: fixed; inset-inline: 4%; top: 74px; z-index: 99;
@@ -140,7 +140,7 @@ html[data-theme="dark"] .btn-ghost:hover { color: #17264a; }
 .hero { padding: 150px 0 90px; position: relative; overflow: clip; }
 
 .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; }
-@media (max-width: 899px) { .hero-grid { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .hero-grid { grid-template-columns: 1fr; } }
 
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
@@ -379,7 +379,7 @@ html[data-theme="dark"] .filter-btn.active { color: #17264a; }
 
 /* ---------- About ---------- */
 .about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 56px; align-items: center; }
-@media (max-width: 899px) { .about-grid { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .about-grid { grid-template-columns: 1fr; } }
 
 .about-photo {
   border-radius: 42% 58% 50% 50% / 48% 45% 55% 52%;
@@ -400,7 +400,7 @@ html[data-theme="dark"] .filter-btn.active { color: #17264a; }
 
 /* ---------- Contact ---------- */
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-@media (max-width: 899px) { .contact-grid { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .contact-grid { grid-template-columns: 1fr; } }
 
 .contact-info { display: grid; gap: 16px; align-content: start; }
 .contact-info h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
@@ -608,7 +608,7 @@ html[data-theme="dark"] .service-card summary:hover { color: #17264a; }
 .services-grid { grid-template-columns: repeat(4, 1fr); }
 .service-card { padding: 28px 18px; }
 @media (max-width: 1020px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 620px) { .services-grid { grid-template-columns: 1fr; } }
+@media (max-width: 340px) { .services-grid { grid-template-columns: 1fr; } }
 
 /* Services cards: icon, title, button pinned to the bottom */
 .service-card { display: flex; flex-direction: column; }
@@ -638,7 +638,7 @@ html[data-theme="dark"] .svc-more:hover { color: #17264a; }
 /* Works: four per row, full width, no filter bar */
 .works-grid { grid-template-columns: repeat(4, 1fr); }
 @media (max-width: 1020px) { .works-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 620px) { .works-grid { grid-template-columns: 1fr; } }
+@media (max-width: 340px) { .works-grid { grid-template-columns: 1fr; } }
 
 /* Works cards: centered title, no category tag */
 .work-meta { justify-content: center; text-align: center; }
@@ -836,4 +836,28 @@ html.loading::after { content: ""; position: fixed; top: 50%; left: 50%; width: 
   .field { gap: 9px; }
   .footer-wrap { flex-direction: column; justify-content: center; text-align: center; gap: 14px; }
   .footer-links { justify-content: center; }
+}
+
+/* Tablet header: keep all nav items on one line, compact button */
+@media (min-width: 761px) and (max-width: 1180px) {
+  .nav-wrap { gap: 10px; }
+  .logo, .logo small { white-space: nowrap; }
+  .main-nav { gap: 2px; }
+  .main-nav a { padding: 8px 9px; font-size: .86rem; white-space: nowrap; }
+  .main-nav a.active::after { inset-inline: 9px; }
+  .nav-actions { gap: 8px; }
+  .nav-cta { white-space: nowrap; padding: 9px 16px !important; font-size: .86rem; }
+}
+/* Phone: same layout as tablet (2 columns), scaled to fit */
+@media (max-width: 620px) {
+  .nav-wrap { gap: 8px; }
+  .logo { font-size: 1rem; white-space: nowrap; }
+  .logo small { white-space: nowrap; }
+  .nav-actions { gap: 6px; }
+  .services-grid, .works-grid { gap: 12px; }
+  .service-card { padding: 22px 10px; }
+  .service-icon { width: 48px; height: 48px; border-radius: 15px; margin-bottom: 12px; }
+  .service-icon svg { width: 22px; height: 22px; }
+  .service-card h3 { font-size: .98rem; }
+  .service-card summary { padding: 9px 12px; font-size: .78rem; }
 }
