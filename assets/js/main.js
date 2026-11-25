@@ -103,7 +103,6 @@
         ${s.image ? `<div class="svc-bg" style="background-image:url('${String(s.image).replace(/'/g, "%27")}');opacity:${(s.bg_opacity || 16) / 100}"></div>` : ""}
         <div class="service-icon">${ICONS[s.icon] || ICONS.sparkle}</div>
         <h3>${lang === "ar" ? s.title_ar : s.title_en}</h3>
-        <span class="service-count">${count} ${lang === "ar" ? "خدمة" : "services"}</span>
         <details>
           <summary><span class="sum-label" data-more="${t("services_toggle_more")}" data-less="${t("services_toggle_less")}">${t("services_toggle_more")}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></summary>
           <div class="chip-list">${items.map((x) => `<span class="chip">${x}</span>`).join("")}</div>

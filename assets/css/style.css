@@ -606,3 +606,8 @@ html[data-theme="dark"] .service-card summary:hover { color: #17264a; }
 .service-card { padding: 28px 18px; }
 @media (max-width: 1020px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 620px) { .services-grid { grid-template-columns: 1fr; } }
+
+/* Services cards: icon, title, button pinned to the bottom */
+.service-card { display: flex; flex-direction: column; }
+.service-card h3 { margin-bottom: 0; }
+.service-card details { margin-top: auto; padding-top: 20px; }
