@@ -452,11 +452,11 @@
 
   /* ---------- Supabase ---------- */
   async function loadRemoteContent() {
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY || typeof window.supabase === "undefined") return;
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY || typeof window.supabase === "undefined") { if (window.__mfReveal) window.__mfReveal(); return; }
     try {
       supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       const { data, error } = await supabase.from("site_content").select("key, value");
-      if (error) { console.warn("Supabase:", error.message); return; }
+      if (error) { console.warn("Supabase:", error.message); if (window.__mfReveal) window.__mfReveal(); return; }
       (data || []).forEach((row) => { content[row.key] = row.value; });
       const { data: works } = await supabase.from("portfolio_items").select("*").eq("visible", true).order("sort_order");
       if (works && works.length) {
@@ -476,7 +476,8 @@
       }
       applyThemeColors();
       applyLang();
-    } catch (e) { console.warn("Supabase offline, using defaults.", e); }
+      if (window.__mfReveal) window.__mfReveal();
+    } catch (e) { console.warn("Supabase offline, using defaults.", e); if (window.__mfReveal) window.__mfReveal(); }
   }
 
   /* ---------- Contact form ---------- */

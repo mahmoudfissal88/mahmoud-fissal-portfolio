@@ -815,3 +815,10 @@ html[data-theme="dark"] .svc-more:hover { color: #17264a; }
   #aboutTitle, #aboutTitle .hl { background-image: none !important; -webkit-text-fill-color: currentColor; }
   #aboutTitle { color: var(--text); } #aboutTitle .hl { color: var(--heading); }
 }
+
+/* first-load: hide starter content until saved content is ready */
+html.loading body > header, html.loading body > main, html.loading body > footer { opacity: 0; }
+html:not(.loading) body > header, html:not(.loading) body > main, html:not(.loading) body > footer { animation: mf-fade .45s ease; }
+@keyframes mf-fade { from { opacity: 0; } to { opacity: 1; } }
+html.loading::after { content: ""; position: fixed; top: 50%; left: 50%; width: 38px; height: 38px; margin: -19px 0 0 -19px; border-radius: 50%; border: 4px solid rgba(245,179,1,.25); border-top-color: #f5b301; animation: mf-spin .8s linear infinite; z-index: 9999; }
+@keyframes mf-spin { to { transform: rotate(360deg); } }
