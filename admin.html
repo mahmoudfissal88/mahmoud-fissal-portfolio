@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=1795581803">
+  <link rel="stylesheet" href="assets/css/style.css?v=1795582309">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%231f3ab0'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23ffc61a' font-family='sans-serif' font-weight='900'>M</text></svg>">
 </head>
 <body>
@@ -126,15 +126,18 @@
     <!-- Contact panel -->
     <div class="admin-panel" data-panel="contact">
       <h2>بيانات التواصل · Contact</h2>
+      <p style="color:var(--muted);font-size:.88rem;margin-bottom:14px">اترك أي حقل فارغاً ليختفي من صفحة الزائر · Leave a field empty to hide it on the site.</p>
       <div class="form-grid">
-        <div class="field"><label>البريد الإلكتروني</label><input id="contact_email"></div>
-        <div class="field"><label>الهاتف</label><input id="contact_phone"></div>
-        <div class="field"><label>رابط واتساب (https://wa.me/...)</label><input id="contact_whatsapp"></div>
+        <div class="field"><label>البريد الإلكتروني · Email</label><input id="contact_email" placeholder="name@email.com"></div>
+        <div class="field"><label>رقم الهاتف · Phone</label><input id="contact_phone" placeholder="+20 ..."></div>
+        <div class="field"><label>WhatsApp (رقم أو رابط)</label><input id="contact_whatsapp" placeholder="201xxxxxxxxx أو https://wa.me/..."></div>
+        <div class="field"><label>Telegram (رابط أو @username)</label><input id="contact_telegram" placeholder="@username أو https://t.me/..."></div>
+        <div class="field"><label>LinkedIn</label><input id="contact_linkedin" placeholder="https://linkedin.com/in/..."></div>
+        <div class="field"><label>Facebook</label><input id="contact_facebook" placeholder="https://facebook.com/..."></div>
+        <div class="field"><label>Instagram</label><input id="contact_instagram" placeholder="https://instagram.com/..."></div>
         <div class="field"><label>الموقع (عربي)</label><input id="contact_location_ar"></div>
         <div class="field"><label>Location (EN)</label><input id="contact_location_en"></div>
       </div>
-      <h2 style="margin-top:24px">حسابات التواصل · Socials</h2>
-      <div id="socialsEditor"></div>
       <div class="admin-actions">
         <span class="save-status" id="status-contact"></span>
       </div>
@@ -157,8 +160,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/config.js?v=1795581803"></script>
-  <script src="assets/js/content.js?v=1795581803"></script>
-  <script src="assets/js/admin.js?v=1795581803"></script>
+  <script src="assets/js/config.js?v=1795582309"></script>
+  <script src="assets/js/content.js?v=1795582309"></script>
+  <script src="assets/js/admin.js?v=1795582309"></script>
 </body>
 </html>

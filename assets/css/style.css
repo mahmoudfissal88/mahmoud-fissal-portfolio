@@ -371,6 +371,8 @@ html[dir="rtl"] .info-row:hover { transform: translateX(-4px); }
 .info-row .ic svg { width: 19px; height: 19px; }
 .info-row b { display: block; font-size: .78rem; color: var(--muted); font-weight: 700; }
 .info-row span { font-weight: 700; font-size: .95rem; direction: ltr; unicode-bidi: plaintext; }
+a.info-link { text-decoration: none; color: inherit; }
+a.info-link:hover span { color: var(--accent); }
 
 .socials { display: flex; gap: 10px; margin-top: 8px; }
 .socials a {

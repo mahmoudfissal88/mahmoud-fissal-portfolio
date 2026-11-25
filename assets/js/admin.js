@@ -317,15 +317,11 @@
   });
 
   function fillContact() {
-    $("#contact_email").value = content.contact.email || "";
-    $("#contact_phone").value = content.contact.phone || "";
-    $("#contact_whatsapp").value = content.contact.whatsapp || "";
-    $("#contact_location_ar").value = content.contact.location_ar || "";
-    $("#contact_location_en").value = content.contact.location_en || "";
-    $("#socialsEditor").innerHTML = (content.contact.socials || []).map((s, i) => `
-      <div class="field" style="margin-bottom:10px"><label>${s.label}</label>
-        <input class="social-url" data-i="${i}" value="${esc(s.url || "")}" placeholder="https://...">
-      </div>`).join("");
+    const c = content.contact || {};
+    ["email", "phone", "whatsapp", "telegram", "linkedin", "facebook", "instagram", "location_ar", "location_en"].forEach((k) => {
+      const el = $("#contact_" + k);
+      if (el) el.value = c[k] || "";
+    });
   }
 
   const COLOR_FIELDS = [
@@ -439,11 +435,11 @@
       content.contact = Object.assign({}, content.contact, {
         email: $("#contact_email").value, phone: $("#contact_phone").value,
         whatsapp: $("#contact_whatsapp").value,
+        telegram: $("#contact_telegram").value,
+        linkedin: $("#contact_linkedin").value,
+        facebook: $("#contact_facebook").value,
+        instagram: $("#contact_instagram").value,
         location_ar: $("#contact_location_ar").value, location_en: $("#contact_location_en").value
-      });
-      $$(".social-url").forEach((inp) => {
-        const i = +inp.dataset.i;
-        if (content.contact.socials[i]) content.contact.socials[i].url = inp.value;
       });
       return (await upsert("contact", content.contact)).error;
     },

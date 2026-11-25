@@ -202,13 +202,15 @@ const DEFAULT_CONTENT = {
     email: "hello@example.com",
     phone: "+20 100 000 0000",
     whatsapp: "",
+    telegram: "",
+    linkedin: "",
+    facebook: "",
+    instagram: "",
     location_ar: "قنا، مصر",
     location_en: "Qena, Egypt",
     socials: [
       { id: "behance", label: "Behance", url: "" },
-      { id: "dribbble", label: "Dribbble", url: "" },
-      { id: "linkedin", label: "LinkedIn", url: "" },
-      { id: "instagram", label: "Instagram", url: "" }
+      { id: "dribbble", label: "Dribbble", url: "" }
     ]
   },
   theme: {
