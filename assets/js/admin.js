@@ -144,11 +144,82 @@
         <div class="form-grid">
           <div class="field"><label>اسم القسم (عربي)</label><input class="svc-title-ar" value="${esc(s.title_ar)}"></div>
           <div class="field"><label>Category title (EN)</label><input class="svc-title-en" value="${esc(s.title_en)}"></div>
-          <div class="field full"><label>الخدمات (عربي) — كل خدمة في سطر</label><textarea class="svc-items-ar">${esc((s.items_ar || []).join("\n"))}</textarea></div>
-          <div class="field full"><label>Services (EN) — one per line</label><textarea class="svc-items-en">${esc((s.items_en || []).join("\n"))}</textarea></div>
+          <div class="field full">
+            <label>خلفية القسم · Category background</label>
+            <div class="svc-bg-admin">
+              ${s.image ? `<img src="${esc(s.image)}" alt="">` : `<span class="svc-bg-none">لا توجد خلفية · No background</span>`}
+              <input type="file" class="svc-file" accept="image/*" hidden>
+              <button type="button" class="small-btn svc-upload">رفع · Upload</button>
+              ${s.image ? `<button type="button" class="small-btn danger svc-bg-del">حذف الخلفية · Remove</button>` : ""}
+              <span style="flex:1"></span>
+              <button type="button" class="small-btn danger svc-del">حذف القسم · Delete category</button>
+            </div>
+          </div>
+          <div class="field"><label>الخدمات (عربي) — كل خدمة في سطر</label><textarea class="svc-items-ar">${esc((s.items_ar || []).join("\n"))}</textarea></div>
+          <div class="field"><label>Services (EN) — one per line</label><textarea class="svc-items-en">${esc((s.items_en || []).join("\n"))}</textarea></div>
         </div>
       </div>`).join("");
+    wireServicesEditor();
   }
+
+  function syncServicesFromForm() {
+    $$("#servicesEditor [data-svc]").forEach((row) => {
+      const i = +row.dataset.svc;
+      if (!content.services[i]) return;
+      content.services[i].title_ar = row.querySelector(".svc-title-ar").value;
+      content.services[i].title_en = row.querySelector(".svc-title-en").value;
+      content.services[i].items_ar = row.querySelector(".svc-items-ar").value.split("\n").map((x) => x.trim()).filter(Boolean);
+      content.services[i].items_en = row.querySelector(".svc-items-en").value.split("\n").map((x) => x.trim()).filter(Boolean);
+    });
+  }
+
+  function wireServicesEditor() {
+    $$("#servicesEditor .svc-upload").forEach((b) =>
+      b.addEventListener("click", () => b.closest(".svc-bg-admin").querySelector(".svc-file").click())
+    );
+    $$("#servicesEditor .svc-file").forEach((f) =>
+      f.addEventListener("change", async () => {
+        const i = +f.closest("[data-svc]").dataset.svc;
+        const url = await uploadImage(f.files[0]);
+        if (url) {
+          syncServicesFromForm();
+          if (content.services[i]) content.services[i].image = url;
+          renderServicesEditor();
+          saveSection("services");
+        }
+      })
+    );
+    $$("#servicesEditor .svc-bg-del").forEach((b) =>
+      b.addEventListener("click", () => {
+        const i = +b.closest("[data-svc]").dataset.svc;
+        syncServicesFromForm();
+        if (content.services[i]) content.services[i].image = "";
+        renderServicesEditor();
+        saveSection("services");
+      })
+    );
+    $$("#servicesEditor .svc-del").forEach((b) =>
+      b.addEventListener("click", () => {
+        if (!confirm("حذف هذا القسم نهائياً؟ · Delete this category permanently?")) return;
+        const i = +b.closest("[data-svc]").dataset.svc;
+        content.services.splice(i, 1);
+        renderServicesEditor();
+        saveSection("services");
+      })
+    );
+  }
+
+  $("#addServiceBtn").addEventListener("click", () => {
+    syncServicesFromForm();
+    content.services.push({
+      id: "cat-" + Date.now(), icon: "sparkle",
+      title_ar: "قسم جديد", title_en: "New category",
+      items_ar: [], items_en: [], image: ""
+    });
+    renderServicesEditor();
+    saveSection("services");
+    $("#addServiceBtn").scrollIntoView({ behavior: "smooth", block: "center" });
+  });
 
   function renderPortfolioEditor() {
     const cats = content.portfolio_categories || [];
@@ -175,6 +246,7 @@
         const i = +b.closest("[data-work]").dataset.work;
         content.portfolio.splice(i, 1);
         renderPortfolioEditor();
+        scheduleAutoSave("portfolio");
       })
     );
     $$("#portfolioEditor .w-upload").forEach((b) =>
@@ -183,7 +255,7 @@
     $$("#portfolioEditor .w-file").forEach((f) =>
       f.addEventListener("change", async () => {
         const url = await uploadImage(f.files[0]);
-        if (url) f.closest(".fields").querySelector(".w-image").value = url;
+        if (url) { f.closest(".fields").querySelector(".w-image").value = url; scheduleAutoSave("portfolio"); }
       })
     );
   }
@@ -195,6 +267,7 @@
       category: (content.portfolio_categories[0] || {}).id || "branding", image: ""
     });
     renderPortfolioEditor();
+    scheduleAutoSave("portfolio");
   });
 
   function fillContact() {
@@ -251,12 +324,12 @@
   $("#hero_image_btn").addEventListener("click", () => $("#hero_image_file").click());
   $("#hero_image_file").addEventListener("change", async (e) => {
     const url = await uploadImage(e.target.files[0]);
-    if (url) $("#hero_image").value = url;
+    if (url) { $("#hero_image").value = url; saveSection("hero"); }
   });
   $("#about_image_btn").addEventListener("click", () => $("#about_image_file").click());
   $("#about_image_file").addEventListener("change", async (e) => {
     const url = await uploadImage(e.target.files[0]);
-    if (url) $("#about_image").value = url;
+    if (url) { $("#about_image").value = url; saveSection("about"); }
   });
 
   /* ---------- Save ---------- */
@@ -301,13 +374,7 @@
       return (await upsert("about", content.about)).error;
     },
     services: async () => {
-      $$("#servicesEditor [data-svc]").forEach((row) => {
-        const i = +row.dataset.svc;
-        content.services[i].title_ar = row.querySelector(".svc-title-ar").value;
-        content.services[i].title_en = row.querySelector(".svc-title-en").value;
-        content.services[i].items_ar = row.querySelector(".svc-items-ar").value.split("\n").map((x) => x.trim()).filter(Boolean);
-        content.services[i].items_en = row.querySelector(".svc-items-en").value.split("\n").map((x) => x.trim()).filter(Boolean);
-      });
+      syncServicesFromForm();
       return (await upsert("services", content.services)).error;
     },
     portfolio: async () => {
@@ -340,16 +407,43 @@
     }
   };
 
-  $$("[data-save]").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const key = btn.dataset.save;
-      const status = $("#status-" + key);
-      status.className = "save-status";
-      status.textContent = "...";
+  /* ---------- Auto-save: any edit in a panel saves itself ---------- */
+  const PANEL_TO_SAVER = { hero: "hero", about: "about", services: "services", portfolio: "portfolio", contact: "contact", colors: "theme" };
+  const autoSaveTimers = {};
+  let saving = false;
+  const pendingSaves = [];
+
+  async function saveSection(key) {
+    if (saving) { if (!pendingSaves.includes(key)) pendingSaves.push(key); return; }
+    saving = true;
+    const status = $("#status-" + key);
+    if (status) { status.className = "save-status"; status.textContent = "..."; }
+    try {
       const err = await SAVERS[key]();
-      if (err) { status.textContent = "خطأ: " + err.message; status.classList.add("err"); }
-      else { status.textContent = "تم الحفظ ✓ Saved"; status.classList.add("ok"); }
-    });
+      if (status) {
+        if (err) { status.textContent = "خطأ: " + err.message; status.classList.add("err"); }
+        else { status.textContent = "تم الحفظ ✓ " + new Date().toLocaleTimeString(); status.classList.add("ok"); }
+      }
+    } finally {
+      saving = false;
+      if (pendingSaves.length) saveSection(pendingSaves.shift());
+    }
+  }
+
+  function scheduleAutoSave(panel) {
+    const key = PANEL_TO_SAVER[panel];
+    if (!key) return;
+    clearTimeout(autoSaveTimers[key]);
+    autoSaveTimers[key] = setTimeout(() => saveSection(key), 1400);
+  }
+
+  $("#adminShell").addEventListener("input", (e) => {
+    const panel = e.target.closest(".admin-panel");
+    if (panel) scheduleAutoSave(panel.dataset.panel);
+  });
+
+  $$("[data-save]").forEach((btn) => {
+    btn.addEventListener("click", () => saveSection(btn.dataset.save));
   });
 
   /* ---------- Messages ---------- */

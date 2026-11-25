@@ -98,7 +98,8 @@
       const items = (lang === "ar" ? s.items_ar : s.items_en) || [];
       const count = items.length;
       return `
-      <div class="service-card reveal" data-delay="${i % 3}">
+      <div class="service-card reveal${s.image ? " has-bg" : ""}" data-delay="${i % 3}">
+        ${s.image ? `<div class="svc-bg" style="background-image:url('${String(s.image).replace(/'/g, "%27")}')"></div>` : ""}
         <div class="service-icon">${ICONS[s.icon] || ICONS.sparkle}</div>
         <h3>${lang === "ar" ? s.title_ar : s.title_en}</h3>
         <span class="service-count">${count} ${lang === "ar" ? "خدمة" : "services"}</span>

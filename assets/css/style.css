@@ -262,6 +262,11 @@ section { padding: 96px 0; }
 }
 .service-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
 .service-card:hover::before { transform: scale(1.8); }
+.service-card .svc-bg {
+  position: absolute; inset: 0; background-size: cover; background-position: center;
+  opacity: .16; pointer-events: none; border-radius: inherit;
+}
+.service-card .service-count { position: relative; z-index: 1; display: inline-block; }
 
 .service-icon {
   width: 58px; height: 58px; border-radius: 18px; display: grid; place-items: center;
@@ -493,3 +498,8 @@ html[data-theme="dark"] .admin-tab.active { color: #17264a; }
   border-radius: 14px; padding: 14px 18px; font-size: .86rem; font-weight: 600;
   margin-bottom: 20px;
 }
+
+/* Admin: category background row */
+.svc-bg-admin { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.svc-bg-admin img { width: 72px; height: 48px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); }
+.svc-bg-none { color: var(--muted); font-size: .85rem; }
