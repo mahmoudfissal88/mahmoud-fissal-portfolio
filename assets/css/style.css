@@ -703,3 +703,26 @@ html[data-theme="dark"] { --shine-1: rgba(255,255,255,.98); --shine-2: rgba(255,
   #heroLine1, .hero h1 .line2 { animation: none !important; background-image: none; -webkit-text-fill-color: currentColor; }
   #heroLine1 { color: var(--heading); } .hero h1 .line2 { color: var(--text); }
 }
+
+/* Section headings: same glint as the hero headline */
+#services .sec-head h2, #portfolio .sec-head h2, #designs .sec-head h2, #contact .sec-head h2,
+#services .sec-head h2 .hl, #portfolio .sec-head h2 .hl, #designs .sec-head h2 .hl, #contact .sec-head h2 .hl {
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  background-repeat: no-repeat; background-size: 260% 100%, 100% 100%;
+  animation: hero-glint 4.2s ease-in-out 1s infinite;
+}
+#services .sec-head h2, #portfolio .sec-head h2, #designs .sec-head h2, #contact .sec-head h2 {
+  background-image: linear-gradient(105deg, transparent 38%, var(--shine-2) 50%, transparent 62%), linear-gradient(var(--text), var(--text));
+}
+#services .sec-head h2 .hl, #portfolio .sec-head h2 .hl, #designs .sec-head h2 .hl, #contact .sec-head h2 .hl {
+  background-image: linear-gradient(105deg, transparent 38%, var(--shine-1) 50%, transparent 62%), linear-gradient(var(--heading), var(--heading));
+}
+#portfolio .sec-head h2, #portfolio .sec-head h2 .hl, #contact .sec-head h2, #contact .sec-head h2 .hl { animation-name: hero-glint-rl; }
+#designs .sec-head h2, #designs .sec-head h2 .hl { animation-delay: 1.6s; }
+#portfolio .sec-head h2, #portfolio .sec-head h2 .hl { animation-delay: 1.3s; }
+#contact .sec-head h2, #contact .sec-head h2 .hl { animation-delay: 1.9s; }
+@media (prefers-reduced-motion: reduce) {
+  .sec-head h2, .sec-head h2 .hl { animation: none !important; background-image: none !important; -webkit-text-fill-color: currentColor; }
+  .sec-head h2 { color: var(--text); } .sec-head h2 .hl { color: var(--heading); }
+}
