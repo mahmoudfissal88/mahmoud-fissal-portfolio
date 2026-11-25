@@ -199,7 +199,8 @@
       if (works && works.length) {
         content.portfolio = works.map((w) => ({
           id: w.id, title_ar: w.title_ar, title_en: w.title_en,
-          category: w.category, image: w.image_url
+          category: w.category, category_ar: w.category_ar, category_en: w.category_en,
+          image: w.image_url, img_opacity: w.img_opacity
         }));
       }
       applyThemeColors();
