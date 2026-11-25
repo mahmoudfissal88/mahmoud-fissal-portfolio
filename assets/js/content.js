@@ -205,7 +205,14 @@ const DEFAULT_CONTENT = {
     { id: "uiux", name_ar: "واجهات", name_en: "UI/UX" },
     { id: "motion", name_ar: "موشن", name_en: "Motion" }
   ],
+  footer: {
+    rights_ar: "جميع الحقوق محفوظة", rights_en: "All rights reserved",
+    show_name: true, show_year: true,
+    extra_ar: "", extra_en: "",
+    admin_visible: true, admin_label_ar: "لوحة التحكم", admin_label_en: "Admin panel"
+  },
   marquee: {
+    visible: true, speed: 30,
     items_ar: ["شعارات", "هوية بصرية", "سوشيال ميديا", "إنفوجرافيك", "عروض تقديمية", "واجهات مستخدم", "موشن جرافيك", "كتب ومذكرات", "محتوى تعليمي", "منصات تعليمية"],
     items_en: ["Logos", "Brand Identity", "Social Media", "Infographics", "Presentations", "UI/UX", "Motion Graphics", "Books", "Learning Content", "Learning Platforms"]
   },

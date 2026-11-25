@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=1795602393">
+  <link rel="stylesheet" href="assets/css/style.css?v=1795602872">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%231f3ab0'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23ffc61a' font-family='sans-serif' font-weight='900'>M</text></svg>">
 </head>
 <body>
@@ -88,6 +88,32 @@
         <div class="tc-head tc-head-dark"><span>الأرقام والإحصائيات · Hero stats</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></div>
         <div class="acard-body">
           <div id="statsEditor"></div>
+        </div>
+      </div>
+      <div class="acard">
+        <div class="tc-head tc-head-light"><span>شريط الإعلان · Announcement strip</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1z"/><path d="M16 9a4 4 0 0 1 0 6"/><path d="M19 6a8 8 0 0 1 0 12"/></svg></div>
+        <div class="acard-body">
+          <div class="form-grid">
+            <div class="field"><label>إظهار الشريط · Show strip</label><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="mq_visible" style="width:auto"> إظهار الشريط المتحرك</label></div>
+            <div class="field"><label>السرعة (ثواني للدورة الكاملة، أقل = أسرع) · Speed (seconds per loop)</label><input id="mq_speed" type="number" min="5" max="200" step="1"></div>
+            <div class="field full"><label>كلمات الشريط (عربي) — كل كلمة في سطر</label><textarea id="mq_items_ar" rows="6"></textarea></div>
+            <div class="field full"><label>Strip words (EN) — one per line</label><textarea id="mq_items_en" rows="6"></textarea></div>
+          </div>
+        </div>
+      </div>
+      <div class="acard">
+        <div class="tc-head tc-head-dark"><span>شريط التذييل · Footer</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 15h18"/></svg></div>
+        <div class="acard-body">
+          <div class="form-grid">
+            <div class="field"><label>نص الحقوق (عربي)</label><input id="ft_rights_ar"></div>
+            <div class="field"><label>Rights text (EN)</label><input id="ft_rights_en"></div>
+            <div class="field"><label>إظهار السنة · Year</label><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="ft_show_year" style="width:auto"> إظهار © والسنة</label></div>
+            <div class="field"><label>إظهار الاسم · Name</label><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="ft_show_name" style="width:auto"> إظهار اسم الموقع</label></div>
+            <div class="field"><label>سطر إضافي (عربي) — اختياري</label><input id="ft_extra_ar"></div>
+            <div class="field"><label>Extra line (EN) — optional</label><input id="ft_extra_en"></div>
+            <div class="field"><label>رابط لوحة التحكم · Admin link</label><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="ft_admin_visible" style="width:auto"> إظهار الرابط في التذييل</label></div>
+            <div class="field"><label>اسم الرابط (عربي) / Link label (EN)</label><div style="display:flex;gap:8px"><input id="ft_admin_ar" style="flex:1"><input id="ft_admin_en" style="flex:1"></div></div>
+          </div>
         </div>
       </div>
       <div class="admin-actions">
@@ -223,8 +249,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/config.js?v=1795602393"></script>
-  <script src="assets/js/content.js?v=1795602393"></script>
-  <script src="assets/js/admin.js?v=1795602393"></script>
+  <script src="assets/js/config.js?v=1795602872"></script>
+  <script src="assets/js/content.js?v=1795602872"></script>
+  <script src="assets/js/admin.js?v=1795602872"></script>
 </body>
 </html>

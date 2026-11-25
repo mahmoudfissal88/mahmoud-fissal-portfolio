@@ -112,6 +112,7 @@
     $("#hero_sub_en").value = content.hero.subtitle_en || "";
     $("#hero_image").value = content.hero.image || "";
     renderStatsEditor();
+    fillMarqueeFooter();
 
     $("#about_text_ar").value = content.about.text_ar || "";
     $("#about_text_en").value = content.about.text_en || "";
@@ -124,6 +125,24 @@
     renderDesignsEditor();
     fillContact();
     renderColorsEditor();
+  }
+
+  function fillMarqueeFooter() {
+    const m = Object.assign({}, DEFAULT_CONTENT.marquee, content.marquee || {});
+    $("#mq_visible").checked = m.visible !== false;
+    $("#mq_speed").value = m.speed || 30;
+    $("#mq_items_ar").value = (m.items_ar || []).join("\n");
+    $("#mq_items_en").value = (m.items_en || []).join("\n");
+    const f = Object.assign({}, DEFAULT_CONTENT.footer, content.footer || {});
+    $("#ft_rights_ar").value = f.rights_ar || "";
+    $("#ft_rights_en").value = f.rights_en || "";
+    $("#ft_show_year").checked = f.show_year !== false;
+    $("#ft_show_name").checked = f.show_name !== false;
+    $("#ft_extra_ar").value = f.extra_ar || "";
+    $("#ft_extra_en").value = f.extra_en || "";
+    $("#ft_admin_visible").checked = f.admin_visible !== false;
+    $("#ft_admin_ar").value = f.admin_label_ar || "";
+    $("#ft_admin_en").value = f.admin_label_en || "";
   }
 
   function renderStatsEditor() {
@@ -637,9 +656,23 @@
         subtitle_ar: $("#hero_sub_ar").value, subtitle_en: $("#hero_sub_en").value,
         image: $("#hero_image").value
       });
+      content.marquee = Object.assign({}, content.marquee, {
+        visible: $("#mq_visible").checked,
+        speed: Math.max(5, Math.min(200, Number($("#mq_speed").value) || 30)),
+        items_ar: lines("#mq_items_ar"), items_en: lines("#mq_items_en")
+      });
+      content.footer = Object.assign({}, content.footer, {
+        rights_ar: $("#ft_rights_ar").value, rights_en: $("#ft_rights_en").value,
+        show_year: $("#ft_show_year").checked, show_name: $("#ft_show_name").checked,
+        extra_ar: $("#ft_extra_ar").value, extra_en: $("#ft_extra_en").value,
+        admin_visible: $("#ft_admin_visible").checked,
+        admin_label_ar: $("#ft_admin_ar").value, admin_label_en: $("#ft_admin_en").value
+      });
       const r1 = await upsert("site", content.site);
       const r2 = await upsert("hero", content.hero);
-      return r1.error || r2.error;
+      const r3 = await upsert("marquee", content.marquee);
+      const r4 = await upsert("footer", content.footer);
+      return r1.error || r2.error || r3.error || r4.error;
     },
     about: async () => {
       content.about = Object.assign({}, content.about, {

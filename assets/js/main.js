@@ -51,6 +51,7 @@
     renderHeader();
     renderHero();
     renderMarquee();
+    renderFooter();
     renderServices();
     renderPortfolio();
     renderDesigns();
@@ -79,9 +80,31 @@
   }
 
   function renderMarquee() {
-    const items = lang === "ar" ? content.marquee.items_ar : content.marquee.items_en;
+    const m = content.marquee || {};
+    const items = (lang === "ar" ? m.items_ar : m.items_en) || [];
     const half = items.map((x) => `<span>${x}</span>`).join("");
     $("#marqueeTrack").innerHTML = half + half;
+    const bar = document.querySelector(".marquee");
+    if (bar) bar.style.display = (m.visible === false || !items.length) ? "none" : "";
+    const sp = Number(m.speed);
+    $("#marqueeTrack").style.animationDuration = sp > 0 ? sp + "s" : "";
+  }
+
+  function renderFooter() {
+    const f = content.footer || {};
+    const D = (DEFAULT_CONTENT.footer || {});
+    const pick = (k) => { const v = f[k + "_" + lang]; return v === undefined ? D[k + "_" + lang] : v; };
+    const year = $("#year"), name = $("#footerName");
+    if (year) { year.textContent = new Date().getFullYear(); year.style.display = f.show_year === false ? "none" : ""; }
+    if (name) name.style.display = f.show_name === false ? "none" : "";
+    const rights = document.querySelector('footer [data-i18n="footer_rights"]');
+    if (rights) { rights.textContent = pick("rights") || ""; }
+    const p = document.querySelector("footer .footer-wrap > p");
+    if (p) p.style.display = (f.show_year === false && f.show_name === false && !pick("rights")) ? "none" : "";
+    const ex = $("#footerExtra");
+    if (ex) { const v = pick("extra") || ""; ex.textContent = v; ex.style.display = v ? "" : "none"; }
+    const a = document.querySelector(".footer-links a");
+    if (a) { a.textContent = pick("admin_label") || ""; a.style.display = (f.admin_visible === false) ? "none" : ""; }
   }
 
   const ICONS = {
