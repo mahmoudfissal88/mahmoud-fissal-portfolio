@@ -826,7 +826,7 @@ html.loading::after { content: ""; position: fixed; top: 50%; left: 50%; width: 
 /* Phone & tablet polish (desktop untouched) */
 @media (max-width: 899px) {
   .dg-project { overflow-x: hidden; }
-  .service-card .svc-bg { opacity: .11; }
+  .service-card:has(.svc-bg) h3 { text-shadow: 0 1px 3px rgba(0,0,0,.85), 0 0 14px rgba(0,0,0,.6); }
 }
 @media (max-width: 640px) {
   section { padding: 60px 0; }
