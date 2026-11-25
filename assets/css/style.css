@@ -735,3 +735,15 @@ html[data-theme="dark"] { --shine-1: rgba(255,255,255,.98); --shine-2: rgba(255,
   #contactChannels { min-height: 0; }
   #contactChannels > .info-row { flex: 1 1 0; }
 }
+
+/* Contact: info column is a box identical in size to the form box; send button centered */
+@media (min-width: 900px) {
+  .contact-info {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 34px; box-shadow: var(--shadow);
+    gap: 16px;
+  }
+  .contact-info h3 { margin: 0; }
+  .contact-info .info-row { background: var(--bg); }
+}
+.contact-form .btn { justify-content: center; text-align: center; }

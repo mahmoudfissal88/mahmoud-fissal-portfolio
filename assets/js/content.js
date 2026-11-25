@@ -35,7 +35,7 @@ const UI_STRINGS = {
     form_name: "الاسم",
     form_email: "البريد الإلكتروني",
     form_message: "رسالتك",
-    form_send: "إرسال",
+    form_send: "إرسال رسالة",
     form_sending: "جارٍ الإرسال...",
     form_sent: "وصلت رسالتك، شكرًا لك!",
     form_error: "تعذر الإرسال، حاول مرة أخرى.",
